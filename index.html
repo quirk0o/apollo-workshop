@@ -1,40 +1,293 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-		<link rel="stylesheet" href="dist/reset.css">
-		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/black.css">
+	<title>Apollo + React</title>
 
-		<!-- Theme used for syntax highlighted code -->
-		<link rel="stylesheet" href="plugin/highlight/monokai.css">
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
-			</div>
+	<link rel="stylesheet" href="dist/reset.css" />
+	<link rel="stylesheet" href="dist/reveal.css" />
+	<link rel="stylesheet" href="dist/theme/apollo.css" />
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="plugin/highlight/atom-one-dark.css" />
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section
+				data-background-image="https://d33wubrfki0l68.cloudfront.net/79880a56361cfde4c79207d6988a63495a3c1110/953fa/static/home-hero-ec83eaa910bbb42b62391e145e6c9a5f.png">
+				<h1 style="margin-bottom: 0">Apollo</h1>
+
+				<p style="margin-top: 0; margin-bottom: calc(var(--r-block-margin) * 2); opacity: 0.6">
+					Basics and Conventions
+				</p>
+				<div style="display: flex; justify-content: center">
+					<svg viewBox="0 0 240 240" style="fill: #ffffff; height: 100px; display: block">
+						<g>
+							<path id="line"
+								d="m205 187 5 0 0 0-4.09 2.12s-4.37 5-6.73 7.35a108.71 108.71 0 1 1-8.49-161.28 12.25 12.25 0 1 0 6.87-7.32 118.67 118.67 0 1 0 16 167.71 5 5 0 0 0-3.55-8.56z">
+							</path>
+							<animateTransform attributeType="xml" attributeName="transform" type="rotate" dur="1s" additive="sum"
+								repeatCount="indefinite" from="0 122 119" to="360 122 119"></animateTransform>
+						</g>
+						<path d="M166.22 158.36h-22l-25.27-71.7-14.19 39.22h21.84l6 17.07H99.43l-5.74 15.43h-22l35.1-91.1h24.31">
+						</path>
+					</svg>
+				</div>
+			</section>
+
+			<section data-markdown="agenda.md"></section>
+
+			<section data-auto-animate>
+				<h2 data-id="code-title">Basic Query Operation</h2>
+				<pre data-id="code-animation"><code class="hljs" data-trim data-line-numbers="|3|4|5|6|14|12-13|16|"><script type="text/template">
+						import { gql, useQuery } from "@apollo/client"
+
+						const query = gql`
+							query User {
+								viewer {
+									login
+								}
+							}
+						`
+
+						function Nav() {
+							const {
+								data: { viewer },
+							} = useQuery(query)
+
+							return <nav>Hello ${viewer.login}</nav>
+						}
+
+					</script></code></pre>
+			</section>
+
+			<section data-auto-animate>
+				<h2 data-id="code-title">Query Operations</h2>
+				<p style="margin-top: calc(-1 * var(--r-block-margin)); opacity: 0.6">Variables</p>
+				<pre data-id="code-animation"><code class="hljs" data-trim data-line-numbers="|4|5|17|"><script type="text/template">
+						import { gql, useQuery } from "@apollo/client"
+
+						const query = gql`
+							query Repo($owner: String!, $name: String) {
+								repository(owner: $owner, name: $name) {
+									name
+									url
+								}
+							}
+						`
+
+						function Repo({ owner, name }) {
+							const {
+								data: {
+									repository,
+								},
+							} = useQuery(query, { variables: { owner, name } })
+
+							return (
+								<div>
+									{repository.name}
+									{repository.url}
+								</div>
+							)
+						}
+
+					</script></code></pre>
+			</section>
+
+			<section data-auto-animate>
+				<h2 data-id="code-title">Query Operations</h2>
+				<p style="margin-top: calc(-1 * var(--r-block-margin)); opacity: 0.6">State</p>
+				<pre data-id="code-animation"><code class="hljs" data-trim data-line-numbers="|12-15"><script type="text/template">
+						import { gql, useQuery } from "@apollo/client"
+
+						const query = gql`
+							query User {
+								viewer {
+									login
+								}
+							}
+						`
+
+						function Nav() {
+							const { loading, error, data } = useQuery(query)
+
+							if (loading) return "Loading…"
+							if (error) return "Failed to load"
+
+							return <nav>Hello ${data.viewer.login}</nav>
+						}
+
+					</script></code></pre>
+			</section>
+
+			<section data-auto-animate>
+				<h2 data-id="code-title">Query Operations</h2>
+				<p style="margin-top: calc(-1 * var(--r-block-margin)); opacity: 0.6">State Helpers</p>
+				<pre><code class="hljs" data-trim><script type="text/template">
+					// api/graph/helpers.js
+
+					const queryResultToStatus = ({
+						loading,
+						error,
+						called,
+						data,
+					}) => {
+						if (!called) return QueryStatus.Idle
+						if (loading) return QueryStatus.Loading
+						if (error) return QueryStatus.Error
+						if (data) return QueryStatus.Success
+						throw new Error(
+							"Apollo query resulted in an unexpected state: ",
+							{
+								called,
+								loading,
+								error,
+								data,
+							}
+						)
+					}
+					</script></code></pre>
+			</section>
+
+			<section data-auto-animate>
+				<h2 data-id="code-title">Basic Mutation Operation</h2>
+				<pre data-id="code-animation"><code class="hljs language-jsx" data-trim data-line-numbers="|4|5-8|14|23|"><script type="text/template">
+					import { gql, useMutation } from "@apollo/client"
+
+					const starRepo = gql`
+						mutation StarRepo($id: ID!) { 
+							addStar(input: {starrableId: $id}) {
+								starrable {
+									stargazerCount
+								}
+							}
+						}
+					`
+
+					function StarButton({ id }) {
+						const [addStar, result] = useMutation(starRepo)
+						const status = queryResultToStatus(result)
+
+						if (status === QueryStatus.Loading) return "Loading…"
+						if (status === QueryStatus.Error)
+							return "Failed to load"
+
+						return (
+							<button
+								onClick={() => addStar({ variables: { id } })}
+							>
+								⭐️
+							</button>
+						)
+					}
+					</script></code></pre>
+			</section>
+
+			<section data-auto-animate>
+				<h2 data-id="code-title">Anatomy of a GraphQL document</h2>
+				<p>Defines one or more operations and fragments.</p>
+				<pre data-id="code-animation"><code class="hljs" data-trim data-line-numbers=""><script type="text/template">
+					{
+						rateLimit {
+							limit
+							nodeCount
+							remaining
+						}
+					}
+
+					# or
+
+					query {
+						rateLimit {
+							limit
+							nodeCount
+							remaining
+						}
+					}
+				</script></code></pre>
+			</section>
+
+			<section data-auto-animate>
+				<h2 data-id="code-title">Anatomy of a GraphQL document</h2>
+				<p>Defines one or more operations and fragments.</p>
+				<pre data-id="code-animation"><code class="hljs" data-trim data-line-numbers=""><script type="text/template">
+					query One {
+						viewer {
+							login
+						}
+						rateLimit {
+							limit
+							nodeCount
+							remaining
+						}
+					}
+
+					query Two {
+						repository(owner: "apollographql", name: "apollo-client") {
+							stargazers {
+								totalCount
+							}
+						}
+					}
+
+					mutation StarRepo($id: ID!) { 
+						addStar(input: {starrableId: $id}) {
+							starrable {
+								stargazerCount
+							}
+						}
+					}
+				</script></code></pre>
+			</section>
+
+			<section data-auto-animate>
+				<h2 data-id="code-title">Fragments</h2>
+				<p>Share fields between operations</p>
+				<pre data-id="code-animation"><code class="hljs language-gql" data-trim data-line-numbers="|1|1-5|9|16"><script type="text/template">
+					fragment RepoMeta on Repository {
+						id
+						name
+						url
+					}
+					
+					query GetRepo {
+						repository(owner: "apollographql", name: "apollo-client") {
+							...RepoMeta
+						}
+					}
+
+					mutation UpdateRepo($id: ID!) {
+						updateRepository(input: {repositoryId: $id, name: "New Name"}) {
+							repository {
+								...RepoMeta
+							}
+						}
+					}
+				</script></code></pre>
+			</section>
 		</div>
+	</div>
 
-		<script src="dist/reveal.js"></script>
-		<script src="plugin/notes/notes.js"></script>
-		<script src="plugin/markdown/markdown.js"></script>
-		<script src="plugin/highlight/highlight.js"></script>
-		<script>
-			// More info about initialization & config:
-			// - https://revealjs.com/initialization/
-			// - https://revealjs.com/config/
-			Reveal.initialize({
-				hash: true,
+	<script src="dist/reveal.js"></script>
+	<script src="plugin/notes/notes.js"></script>
+	<script src="plugin/markdown/markdown.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			hash: true,
 
-				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
-			});
-		</script>
-	</body>
+			// Learn about plugins: https://revealjs.com/plugins/
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
+		})
+	</script>
+</body>
+
 </html>
