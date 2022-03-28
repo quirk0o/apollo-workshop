@@ -10,9 +10,11 @@
 	<link rel="stylesheet" href="dist/reset.css" />
 	<link rel="stylesheet" href="dist/reveal.css" />
 	<link rel="stylesheet" href="dist/theme/apollo.css" />
+	<link rel="stylesheet" href="dist/apollo.css" />
 
 	<!-- Theme used for syntax highlighted code -->
 	<link rel="stylesheet" href="plugin/highlight/atom-one-dark.css" />
+	<!-- <link rel="stylesheet" href="plugin/highlight/hybrid.css" /> -->
 </head>
 
 <body>
@@ -42,9 +44,9 @@
 
 			<section data-markdown="agenda.md"></section>
 
-			<section data-auto-animate>
+			<section>
 				<h2 data-id="code-title">Basic Query Operation</h2>
-				<pre data-id="code-animation"><code class="hljs" data-trim data-line-numbers="|3|4|5|6|14|12-13|16|"><script type="text/template">
+				<pre data-id="code-animation"><code class="hljs jsx" data-trim data-line-numbers="|3|4|5|6|14|12-13|16|"><script type="text/template">
 						import { gql, useQuery } from "@apollo/client"
 
 						const query = gql`
@@ -69,7 +71,7 @@
 			<section data-auto-animate>
 				<h2 data-id="code-title">Query Operations</h2>
 				<p style="margin-top: calc(-1 * var(--r-block-margin)); opacity: 0.6">Variables</p>
-				<pre data-id="code-animation"><code class="hljs" data-trim data-line-numbers="|4|5|17|"><script type="text/template">
+				<pre data-id="code-animation"><code class="hljs jsx" data-trim data-line-numbers="|4|5|17|"><script type="text/template">
 						import { gql, useQuery } from "@apollo/client"
 
 						const query = gql`
@@ -102,7 +104,7 @@
 			<section data-auto-animate>
 				<h2 data-id="code-title">Query Operations</h2>
 				<p style="margin-top: calc(-1 * var(--r-block-margin)); opacity: 0.6">State</p>
-				<pre data-id="code-animation"><code class="hljs" data-trim data-line-numbers="|12-15"><script type="text/template">
+				<pre data-id="code-animation"><code class="hljs jsx" data-trim data-line-numbers="|12-15"><script type="text/template">
 						import { gql, useQuery } from "@apollo/client"
 
 						const query = gql`
@@ -128,7 +130,7 @@
 			<section data-auto-animate>
 				<h2 data-id="code-title">Query Operations</h2>
 				<p style="margin-top: calc(-1 * var(--r-block-margin)); opacity: 0.6">State Helpers</p>
-				<pre><code class="hljs" data-trim><script type="text/template">
+				<pre><code class="hljs jsx" data-trim><script type="text/template">
 					// api/graph/helpers.js
 
 					const queryResultToStatus = ({
@@ -154,9 +156,9 @@
 					</script></code></pre>
 			</section>
 
-			<section data-auto-animate>
+			<section>
 				<h2 data-id="code-title">Basic Mutation Operation</h2>
-				<pre data-id="code-animation"><code class="hljs language-jsx" data-trim data-line-numbers="|4|5-8|14|23|"><script type="text/template">
+				<pre data-id="code-animation"><code class="hljs jsx" data-trim data-line-numbers="|4|5-8|14|23|"><script type="text/template">
 					import { gql, useMutation } from "@apollo/client"
 
 					const starRepo = gql`
@@ -191,7 +193,7 @@
 			<section data-auto-animate>
 				<h2 data-id="code-title">Anatomy of a GraphQL document</h2>
 				<p>Defines one or more operations and fragments.</p>
-				<pre data-id="code-animation"><code class="hljs" data-trim data-line-numbers=""><script type="text/template">
+				<pre data-id="code-animation"><code class="hljs graphql" data-trim data-line-numbers=""><script type="text/template">
 					{
 						rateLimit {
 							limit
@@ -215,7 +217,7 @@
 			<section data-auto-animate>
 				<h2 data-id="code-title">Anatomy of a GraphQL document</h2>
 				<p>Defines one or more operations and fragments.</p>
-				<pre data-id="code-animation"><code class="hljs" data-trim data-line-numbers=""><script type="text/template">
+				<pre data-id="code-animation"><code class="hljs graphql" data-trim data-line-numbers=""><script type="text/template">
 					query One {
 						viewer {
 							login
@@ -245,10 +247,10 @@
 				</script></code></pre>
 			</section>
 
-			<section data-auto-animate>
+			<section>
 				<h2 data-id="code-title">Fragments</h2>
 				<p>Share fields between operations</p>
-				<pre data-id="code-animation"><code class="hljs language-gql" data-trim data-line-numbers="|1|1-5|9|16"><script type="text/template">
+				<pre data-id="code-animation"><code class="hljs graphql" data-trim data-line-numbers="|1|1-5|9|16"><script type="text/template">
 					fragment RepoMeta on Repository {
 						id
 						name
@@ -270,24 +272,337 @@
 					}
 				</script></code></pre>
 			</section>
+
+			<section>
+				<h2 data-id="code-title">Mocking</h2>
+				<p>Introspection Query</p>
+				<pre data-id="code-animation"><code class="hljs graphql" data-trim data-line-numbers="|"><script type="text/template">
+					query IntrospectionQuery {
+						__schema {
+							queryType { name }
+							mutationType { name }
+							subscriptionType { name }
+							types {
+								...FullType
+							}
+							directives {
+								name
+								description
+								locations
+								args {
+									...InputValue
+								}
+							}
+						}
+					}
+					fragment FullType on __Type {
+						kind
+						name
+						description
+						fields(includeDeprecated: true) {
+							name
+							description
+							args {
+								...InputValue
+							}
+							type {
+								...TypeRef
+							}
+							isDeprecated
+							deprecationReason
+						}
+						inputFields {
+							...InputValue
+						}
+						interfaces {
+							...TypeRef
+						}
+						enumValues(includeDeprecated: true) {
+							name
+							description
+							isDeprecated
+							deprecationReason
+						}
+						possibleTypes {
+							...TypeRef
+						}
+					}
+					fragment InputValue on __InputValue {
+						name
+						description
+						type { ...TypeRef }
+						defaultValue
+					}
+					fragment TypeRef on __Type {
+						kind
+						name
+						ofType {
+							kind
+							name
+							ofType {
+								kind
+								name
+								ofType {
+									kind
+									name
+									ofType {
+										kind
+										name
+										ofType {
+											kind
+											name
+											ofType {
+												kind
+												name
+												ofType {
+													kind
+													name
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				</script></code></pre>
+			</section>
+
+			<section data-auto-animate>
+				<h2 data-id="code-title">Mocking</h2>
+				<p><code>@graphql-tools/mock</code></p>
+				<pre data-id="code-animation"><code class="hljs jsx" data-trim data-line-numbers="|2|5-8|"><script type="text/template">
+					import { buildClientSchema } from "graphql"
+					import * as introspectionResult from "schema.json"
+
+					const schema = buildClientSchema(introspectionResult)
+					const schemaWithMocks = addMocksToSchema({
+						schema,
+						mocks: {},
+					})
+
+				</script></code></pre>
+			</section>
+
+			<section data-auto-animate>
+				<h2 data-id="code-title">Mocking</h2>
+				<p>Type Mocks</p>
+				<pre data-id="code-animation"><code class="hljs jsx" data-trim data-line-numbers="|4-12|15-18|"><script type="text/template">
+					import { buildClientSchema } from "graphql"
+					import * as introspectionResult from "schema.json"
+
+					const mocks = {
+						Int: () => 6,
+						Float: () => 22.1,
+						String: () => "Hello",
+						Person: () => ({
+							name: random.name(),
+							age: random.integer(0, 120),
+						}),
+					}
+
+					const schema = buildClientSchema(introspectionResult)
+					const schemaWithMocks = addMocksToSchema({
+						schema,
+						mocks,
+					})
+				</script></code></pre>
+			</section>
+
+			<section data-auto-animate>
+				<h2 data-id="code-title">Mocking</h2>
+				<p>Query and Mutation Results</p>
+				<pre data-id="code-animation"><code class="hljs jsx" data-trim data-line-numbers="|24|5|6|6-8|9-11|4|13|14-18|"><script type="text/template">
+					import { buildClientSchema } from "graphql"
+					import * as introspectionResult from "schema.json"
+
+					const resolvers = (store) => ({
+						Query: {
+							viewer(parent, args, context, info) {
+								return JSON.parse(localStorage.getItem("user"))
+							},
+							userById(parent, { id }) {
+								return store.get("User", id)
+							},
+						},
+						Mutation: {
+							changeMyName(parent, { name }) {
+								store.set("Query", "ROOT", "viewer", { name })
+
+								return store.get("Query", "ROOT", "viewer")
+							},
+						},
+					})
+
+					const schema = buildClientSchema(introspectionResult)
+					const schemaWithMocks = addMocksToSchema({
+						schema,
+						mocks: {},
+						resolvers,
+					})
+				</script></code></pre>
+			</section>
+
+			<section data-markdown>
+				<textarea data-template>
+					## Caching
+					Apollo Normalized Cache
+					- Responses are stored in a *local*, *normalized*, *in-memory* cache
+					- Objects are identified by their `__typename` and `id` fields 
+
+						(e.g. `Person:2eoufhasdfa`)
+					- Objects are stored in a *flat lookup table*
+
+				</textarea>
+			</section>
+
+			<section data-auto-animate>
+				<h2 data-id="code-title">Type Policies</h2>
+				<p>Transform response fields</p>
+				<pre data-id="code-animation"><code class="hljs jsx" data-trim data-line-numbers="|24|5|6|6-8|9-11|4|13|14-18|"><script type="text/template">
+					const cache = new InMemoryCache({
+						typePolicies: {
+							User: {
+								fields: {
+									dateOfBirth(value) {
+										return parseISO(value)
+									}
+								},
+							},
+						},
+					});
+				</script></code></pre>
+			</section>
+
+			<section data-auto-animate>
+				<h2 data-id="code-title">Type Policies</h2>
+				<p>Calculate client-side data</p>
+				<pre data-id="code-animation"><code class="hljs jsx" data-trim data-line-numbers="|24|5|6|6-8|9-11|4|13|14-18|"><script type="text/template">
+					const cache = new InMemoryCache({
+						typePolicies: {
+							User: {
+								fields: {
+									age(_, { readField }) {
+										return differenceInYears(
+											new Date(),
+											readField("dateOfBirth")
+										)
+									}
+								},
+							},
+						},
+					});
+
+					// later in query
+					const query = gql`
+						query User {
+							viewer {
+								login
+								dateOfBirth
+								age @client
+							}
+						}
+					`
+				</script></code></pre>
+			</section>
+
+			<section data-auto-animate>
+				<h2 data-id="code-title">Type Policies</h2>
+				<p>References</p>
+				<pre data-id="code-animation"><code class="hljs jsx" data-trim data-line-numbers="|24|5|6|6-8|9-11|4|13|14-18|"><script type="text/template">
+					const cache = new InMemoryCache({
+						typePolicies: {
+							User: {
+								fields: {
+									randomRepo(_, { readField }) {
+										return differenceInYears(
+											new Date(),
+											readField("dateOfBirth")
+										)
+									}
+								},
+							},
+						},
+					});
+
+					// later in query
+					const query = gql`
+						query User {
+							viewer {
+								login
+								repositories {
+									name
+								}
+							}
+						}
+					`
+				</script></code></pre>
+			</section>
 		</div>
 	</div>
+
+
 
 	<script src="dist/reveal.js"></script>
 	<script src="plugin/notes/notes.js"></script>
 	<script src="plugin/markdown/markdown.js"></script>
 	<script src="plugin/highlight/highlight.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+	<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/languages/graphql.min.js"></script> -->
+
+
 	<script>
 		// More info about initialization & config:
 		// - https://revealjs.com/initialization/
 		// - https://revealjs.com/config/
-		Reveal.initialize({
-			hash: true,
+		const regex = {
+			source(re) {
+				if (!re) return null;
+				if (typeof re === "string") return re;
 
+				return re.source;
+			},
+
+			concat(...args) {
+				const joined = args.map((x) => regex.source(x)).join("");
+				return joined;
+			},
+
+			lookahead(re) {
+				return regex.concat('(?=', re, ')');
+			}
+		}
+
+		Reveal.initialize({
+			highlight: {
+				beforeHighlight: hljs => hljs.registerLanguage("graphql", function (hljs) {
+					return {
+						name: "GraphQL",
+						aliases: ["gql"], case_insensitive: !0, disableAutodetect: !1, keywords: {
+							keyword: ["query", "mutation", "subscription", "type", "input", "schema", "directive", "interface", "union", "scalar", "fragment", "enum", "on"],
+							literal: ["true", "false", "null"]
+						},
+						contains: [hljs.HASH_COMMENT_MODE, hljs.QUOTE_STRING_MODE, hljs.NUMBER_MODE, {
+							scope: "punctuation", match: /[.]{3}/, relevance: 0
+						}, {
+							scope: "punctuation",
+							begin: /[\!\(\)\:\=\[\]\{\|\}]{1}/, relevance: 0
+						}, {
+							scope: "variable", begin: /\$/,
+							end: /\W/, excludeEnd: !0, relevance: 0
+						}, { scope: "meta", match: /@\w+/, excludeEnd: !0 }, {
+							scope: "symbol", begin: regex.concat(/[_A-Za-z][_0-9A-Za-z]*/, regex.lookahead(/\s*:/)),
+							relevance: 0
+						}], illegal: [/[;<']/, /BEGIN/]
+					}
+				})
+			},
+			hash: true,
 			// Learn about plugins: https://revealjs.com/plugins/
 			plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
 		})
 	</script>
+
 </body>
 
 </html>

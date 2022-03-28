@@ -44,3 +44,12 @@ $heading4Size: 1.0em;
 // Theme template ------------------------------
 @import "../template/theme";
 // ---------------------------------------------
+
+.reveal li {
+  font-size: 0.8em;
+  margin-bottom: var(--r-block-margin);
+
+  p {
+    margin: 0;
+  }
+}
