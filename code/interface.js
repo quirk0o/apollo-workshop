@@ -4,7 +4,11 @@ const starRepo = gql`
   mutation StarRepo($id: ID!) {
     addStar(input: { starrableId: $id }) {
       starrable {
+        id
         stargazerCount
+        ... on Repository {
+          homepageUrl
+        }
       }
     }
   }

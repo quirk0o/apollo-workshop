@@ -1,0 +1,20 @@
+fragment UserProfile on User {
+  id
+  login
+  avatarUrl
+}
+
+query CurrentUser {
+  viewer {
+    ...UserProfile
+  }
+}
+
+query Owner($name: String!, $owner: String!) {
+  repository(name: $name, owner: $owner) {
+    url
+    owner {
+      ...UserProfile
+    }
+  }
+}

@@ -53,3 +53,10 @@ $heading4Size: 1.0em;
     margin: 0;
   }
 }
+
+.reveal .subtitle {
+  margin-top: calc(
+    -1 * var(--r-block-margin)
+  );
+  opacity: 0.6;
+}

@@ -1,52 +1,114 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
 
-<head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Apollo + React</title>
 
-	<title>Apollo + React</title>
+    <link rel="stylesheet" href="dist/reset.css" />
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link
+      rel="stylesheet"
+      href="dist/theme/apollo.css"
+    />
 
-	<link rel="stylesheet" href="dist/reset.css" />
-	<link rel="stylesheet" href="dist/reveal.css" />
-	<link rel="stylesheet" href="dist/theme/apollo.css" />
-	<link rel="stylesheet" href="dist/apollo.css" />
+    <!-- Theme used for syntax highlighted code -->
+    <link
+      rel="stylesheet"
+      href="plugin/highlight/atom-one-dark.css"
+    />
+    <!-- <link rel="stylesheet" href="plugin/highlight/hybrid.css" /> -->
 
-	<!-- Theme used for syntax highlighted code -->
-	<link rel="stylesheet" href="plugin/highlight/atom-one-dark.css" />
-	<!-- <link rel="stylesheet" href="plugin/highlight/hybrid.css" /> -->
-</head>
+    <style>
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
 
-<body>
-	<div class="reveal">
-		<div class="slides">
-			<section
-				data-background-image="https://d33wubrfki0l68.cloudfront.net/79880a56361cfde4c79207d6988a63495a3c1110/953fa/static/home-hero-ec83eaa910bbb42b62391e145e6c9a5f.png">
-				<h1 style="margin-bottom: 0">Apollo</h1>
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
 
-				<p style="margin-top: 0; margin-bottom: calc(var(--r-block-margin) * 2); opacity: 0.6">
-					Basics and Conventions
-				</p>
-				<div style="display: flex; justify-content: center">
-					<svg viewBox="0 0 240 240" style="fill: #ffffff; height: 100px; display: block">
-						<g>
-							<path id="line"
-								d="m205 187 5 0 0 0-4.09 2.12s-4.37 5-6.73 7.35a108.71 108.71 0 1 1-8.49-161.28 12.25 12.25 0 1 0 6.87-7.32 118.67 118.67 0 1 0 16 167.71 5 5 0 0 0-3.55-8.56z">
-							</path>
-							<animateTransform attributeType="xml" attributeName="transform" type="rotate" dur="1s" additive="sum"
-								repeatCount="indefinite" from="0 122 119" to="360 122 119"></animateTransform>
-						</g>
-						<path d="M166.22 158.36h-22l-25.27-71.7-14.19 39.22h21.84l6 17.07H99.43l-5.74 15.43h-22l35.1-91.1h24.31">
-						</path>
-					</svg>
-				</div>
-			</section>
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section
+          data-background-image="https://d33wubrfki0l68.cloudfront.net/79880a56361cfde4c79207d6988a63495a3c1110/953fa/static/home-hero-ec83eaa910bbb42b62391e145e6c9a5f.png"
+        >
+          <h1 style="margin-bottom: 0">Apollo</h1>
 
-			<section data-markdown="agenda.md"></section>
+          <p
+            style="
+              margin-top: 0;
+              margin-bottom: calc(
+                var(--r-block-margin) * 2
+              );
+              opacity: 0.6;
+            "
+          >
+            Basics and Conventions
+          </p>
+          <div
+            style="
+              display: flex;
+              justify-content: center;
+            "
+          >
+            <svg
+              width="100px"
+              height="100px"
+              viewBox="0 0 240 240"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+            >
+              <g
+                transform="translate(20.000000, 20.000000)"
+                fill-rule="nonzero"
+              >
+                <polygon
+                  fill="white"
+                  points="112.4 48.7 88.2 48.7 53.2 139.6 75.1 139.6 80.8 124.2 113.9 124.2 107.9 107.2 86.1 107.2 100.3 68.1 125.5 139.6 147.4 139.6"
+                ></polygon>
+                <path
+                  id="logo-spin"
+                  fill="white"
+                  d="M196.3,73 C196.2,72.7 196.2,72.4 196,72.1 C196,72 195.9,71.8 195.9,71.8 C195.1,70.1 193.4,68.9 191.4,68.9 C188.6,68.9 186.4,71.1 186.4,73.9 C186.4,74.5 186.5,75 186.7,75.5 L186.7,75.5 C188.9,83.4 190,91.6 190,100 C190,124 180.6,146.6 163.6,163.6 C146.6,180.6 124,190 100,190 C76,190 53.4,180.6 36.4,163.6 C19.4,146.6 10,124 10,100 C10,76 19.4,53.4 36.4,36.4 C53.4,19.4 76,10 100,10 C121.5,10 141.8,17.5 158,31.2 C157.5,32.6 157.2,34.1 157.2,35.7 C157.2,42.5 162.7,47.9 169.4,47.9 C176.2,47.9 181.6,42.4 181.6,35.7 C181.6,29 176.1,23.5 169.4,23.5 C167.9,23.5 166.5,23.8 165.2,24.2 C147.7,9.1 124.9,0 100,0 C44.8,0 0,44.8 0,100 C0,155.2 44.8,200 100,200 C155.2,200 200,155.2 200,100 C200,90.7 198.7,81.6 196.3,73 Z"
+                  style="
+                    transform-origin: 100px 100px;
+                    animation: 2s
+                      cubic-bezier(0.75, 0, 0.25, 1) 0s
+                      infinite normal none running spin;
+                  "
+                ></path>
+              </g>
+              <rect
+                fill="transparent"
+                x="0"
+                y="0"
+                width="240"
+                height="240"
+              ></rect>
+            </svg>
+          </div>
+        </section>
 
-			<section>
-				<h2 data-id="code-title">Basic Query Operation</h2>
-				<pre data-id="code-animation"><code class="hljs jsx" data-trim data-line-numbers="|3|4|5|6|14|12-13|16|"><script type="text/template">
+        <section data-markdown="agenda.md"></section>
+
+        <section>
+          <h2 data-id="code-title">
+            Basic Query Operation
+          </h2>
+          <pre
+            data-id="code-animation"
+          ><code class="hljs jsx" data-trim data-line-numbers="|3|4|5|6|14|12-13|16|"><script type="text/template">
 						import { gql, useQuery } from "@apollo/client"
 
 						const query = gql`
@@ -66,12 +128,16 @@
 						}
 
 					</script></code></pre>
-			</section>
+        </section>
 
-			<section data-auto-animate>
-				<h2 data-id="code-title">Query Operations</h2>
-				<p style="margin-top: calc(-1 * var(--r-block-margin)); opacity: 0.6">Variables</p>
-				<pre data-id="code-animation"><code class="hljs jsx" data-trim data-line-numbers="|4|5|17|"><script type="text/template">
+        <section data-auto-animate>
+          <h2 data-id="code-title">
+            Query Operations
+          </h2>
+          <p class="subtitle">Variables</p>
+          <pre
+            data-id="code-animation"
+          ><code class="hljs jsx" data-trim data-line-numbers="|4|5|17|"><script type="text/template">
 						import { gql, useQuery } from "@apollo/client"
 
 						const query = gql`
@@ -99,12 +165,16 @@
 						}
 
 					</script></code></pre>
-			</section>
+        </section>
 
-			<section data-auto-animate>
-				<h2 data-id="code-title">Query Operations</h2>
-				<p style="margin-top: calc(-1 * var(--r-block-margin)); opacity: 0.6">State</p>
-				<pre data-id="code-animation"><code class="hljs jsx" data-trim data-line-numbers="|12-15"><script type="text/template">
+        <section data-auto-animate>
+          <h2 data-id="code-title">
+            Query Operations
+          </h2>
+          <p class="subtitle">State</p>
+          <pre
+            data-id="code-animation"
+          ><code class="hljs jsx" data-trim data-line-numbers="|12-15"><script type="text/template">
 						import { gql, useQuery } from "@apollo/client"
 
 						const query = gql`
@@ -125,12 +195,14 @@
 						}
 
 					</script></code></pre>
-			</section>
+        </section>
 
-			<section data-auto-animate>
-				<h2 data-id="code-title">Query Operations</h2>
-				<p style="margin-top: calc(-1 * var(--r-block-margin)); opacity: 0.6">State Helpers</p>
-				<pre><code class="hljs jsx" data-trim><script type="text/template">
+        <section data-auto-animate>
+          <h2 data-id="code-title">
+            Query Operations
+          </h2>
+          <p class="subtitle">State Helpers</p>
+          <pre><code class="hljs jsx" data-trim><script type="text/template">
 					// api/graph/helpers.js
 
 					const queryResultToStatus = ({
@@ -154,11 +226,15 @@
 						)
 					}
 					</script></code></pre>
-			</section>
+        </section>
 
-			<section>
-				<h2 data-id="code-title">Basic Mutation Operation</h2>
-				<pre data-id="code-animation"><code class="hljs jsx" data-trim data-line-numbers="|4|5-8|14|23|"><script type="text/template">
+        <section>
+          <h2 data-id="code-title">
+            Basic Mutation Operation
+          </h2>
+          <pre
+            data-id="code-animation"
+          ><code class="hljs jsx" data-trim data-line-numbers="|4|5-8|14|23|"><script type="text/template">
 					import { gql, useMutation } from "@apollo/client"
 
 					const starRepo = gql`
@@ -188,12 +264,19 @@
 						)
 					}
 					</script></code></pre>
-			</section>
+        </section>
 
-			<section data-auto-animate>
-				<h2 data-id="code-title">Anatomy of a GraphQL document</h2>
-				<p>Defines one or more operations and fragments.</p>
-				<pre data-id="code-animation"><code class="hljs graphql" data-trim data-line-numbers=""><script type="text/template">
+        <section data-auto-animate>
+          <h2 data-id="code-title">
+            Anatomy of a GraphQL document
+          </h2>
+          <p class="subtitle">
+            Defines one or more operations and
+            fragments.
+          </p>
+          <pre
+            data-id="code-animation"
+          ><code class="hljs graphql" data-trim data-line-numbers=""><script type="text/template">
 					{
 						rateLimit {
 							limit
@@ -212,12 +295,19 @@
 						}
 					}
 				</script></code></pre>
-			</section>
+        </section>
 
-			<section data-auto-animate>
-				<h2 data-id="code-title">Anatomy of a GraphQL document</h2>
-				<p>Defines one or more operations and fragments.</p>
-				<pre data-id="code-animation"><code class="hljs graphql" data-trim data-line-numbers=""><script type="text/template">
+        <section data-auto-animate>
+          <h2 data-id="code-title">
+            Anatomy of a GraphQL document
+          </h2>
+          <p class="subtitle">
+            Defines one or more operations and
+            fragments.
+          </p>
+          <pre
+            data-id="code-animation"
+          ><code class="hljs graphql" data-trim data-line-numbers=""><script type="text/template">
 					query One {
 						viewer {
 							login
@@ -245,38 +335,419 @@
 						}
 					}
 				</script></code></pre>
-			</section>
+        </section>
 
-			<section>
-				<h2 data-id="code-title">Fragments</h2>
-				<p>Share fields between operations</p>
-				<pre data-id="code-animation"><code class="hljs graphql" data-trim data-line-numbers="|1|1-5|9|16"><script type="text/template">
-					fragment RepoMeta on Repository {
+        <section>
+          <h2 data-id="code-title">
+            Interfaces and Unions
+          </h2>
+          <pre
+            data-id="code-animation"
+          ><code class="hljs jsx" data-trim data-line-numbers="|6-12|"><script type="text/template">
+						import { gql, useMutation } from "@apollo/client"
+
+						const starRepo = gql`
+							mutation StarRepo($id: ID!) {
+								addStar(input: { starrableId: $id }) {
+									starrable {
+										id
+										stargazerCount
+										... on Repository {
+											homepageUrl
+										}
+									}
+								}
+							}
+						`
+						
+						function StarButton({ id }) {
+							const [addStar, result] = useMutation(starRepo)
+							const status = queryResultToStatus(result)
+						
+							if (status === QueryStatus.Loading) return "Loading…"
+							if (status === QueryStatus.Error)
+								return "Failed to load"
+						
+							return (
+								<button
+									onClick={() => addStar({ variables: { id } })}
+								>
+									⭐️
+								</button>
+							)
+						}
+						
+					</script></code></pre>
+        </section>
+
+        <section>
+          <h2 data-id="code-title">Fragments</h2>
+          <p class="subtitle">
+            Share fields between operations
+          </p>
+          <pre
+            data-id="code-animation"
+          ><code class="hljs graphql" data-trim data-line-numbers="|1|1-5|9|16|"><script type="text/template">
+					fragment Profile on User {
 						id
-						name
-						url
+						login
+						avatarUrl
 					}
 					
-					query GetRepo {
-						repository(owner: "apollographql", name: "apollo-client") {
-							...RepoMeta
+					query CurrentUser {
+						viewer {
+							...Profile
 						}
 					}
-
-					mutation UpdateRepo($id: ID!) {
-						updateRepository(input: {repositoryId: $id, name: "New Name"}) {
-							repository {
-								...RepoMeta
+					
+					query Owner($name: String!, $owner: String!) {
+						repository(name: $name, owner: $owner) {
+							owner {
+								...Profile
 							}
 						}
 					}
 				</script></code></pre>
-			</section>
+        </section>
 
-			<section>
-				<h2 data-id="code-title">Mocking</h2>
-				<p>Introspection Query</p>
-				<pre data-id="code-animation"><code class="hljs graphql" data-trim data-line-numbers="|"><script type="text/template">
+        <section data-markdown>
+          <textarea data-template>
+					## Caching
+					Apollo Normalized Cache <!-- .element: class="subtitle" -->
+					- Responses are stored in a *local*, *normalized*, *in-memory* cache
+					- Objects are identified by their `__typename` and `id` fields 
+
+						(e.g. `Person:12345`)
+					- Objects are stored in a *flat lookup table*
+
+				</textarea
+          >
+        </section>
+
+        <section data-markdown>
+          <textarea data-template>
+					## Caching
+					Cache Reads <!-- .element: class="subtitle" -->
+					- If *all* requested data is present in the cache, that data is returned
+					- This includes references to other objects
+
+					[Fetch Policies](https://www.apollographql.com/docs/react/data/queries/#setting-a-fetch-policy)
+				</textarea
+          >
+        </section>
+
+        <section data-markdown>
+          <textarea data-template>
+					## Caching
+					Cache Writes <!-- .element: class="subtitle" -->
+					- Objects in the cache are merged with new data:
+					- For shared fields, the new object overwrites the cached values for those fields.
+					- Other fields are preserved.
+				</textarea
+          >
+        </section>
+
+        <section data-markdown>
+          <textarea data-template>
+					## Quiz Time!
+				</textarea
+          >
+        </section>
+
+				<section data-auto-animate="">
+          <p class="subtitle">
+						Given the two queries below, what will be
+            stored in the cache?
+          </p>
+
+          <pre
+            data-id="code-animation" style="font-size: 0.2em"
+          ><code class="hljs jsx" data-trim><script type="text/template">
+						import { gql, useQuery } from "@apollo/client"
+
+						const getRepo = gql`
+							query Repo($name: String!, $owner: String!) {
+								repository(name: $name, owner: $owner) {
+									id
+									url
+									owner {
+										... on Organization {
+											id
+											name
+											url
+										}
+									}
+								}
+							}
+						`
+
+						const getOrg = gql`
+							query Org($login: String!) {
+								organization(login: $login) {
+									id
+									name
+									url
+							}
+						`
+						
+						function Component({ id }) {
+							useQuery(getRepo, { variables: {name: "apollo", owner: "apollographql"}})
+							useQuery(getOrg, { variables: {login: "apollographql"}})
+						
+							// ...
+						}
+						
+				</script></code></pre>
+				<pre
+				data-id="code-animation" style="max-width: 350px; padding-left: 8px"
+			>
+        </section>
+
+        <section data-auto-animate="">
+          <p class="subtitle">
+            Given the two queries below, what will be
+            stored in the cache?
+          </p>
+					<div style="display: flex; flex-direction: row;">
+            <pre
+              data-id="code-animation"
+							style="font-size: 0.2em"
+            ><code class="hljs jsx" data-trim><script type="text/template">
+						import { gql, useQuery } from "@apollo/client"
+
+						const query1 = gql`
+							query Repo($name: String!, $owner: String!) {
+								repository(name: $name, owner: $owner) {
+									id
+									url
+									owner {
+										... on Organization {
+											id
+											name
+											url
+										}
+									}
+								}
+							}
+						`
+
+						const query2 = gql`
+							query Org($login: String!) {
+								organization(login: $login) {
+									id
+									name
+									url
+							}
+						`
+						
+						function StarButton({ id }) {
+							useQuery(query1, { variables: {name: "apollo-client", owner: "apollographql"}})
+							useQuery(query2, { variables: {name: "apollo-client", owner: "apollographql"}})
+						
+							// ...
+						}
+						
+				</script></code></pre>
+				<pre
+				data-id="code-animation" style="max-width: 350px; padding-left: 8px; font-size: 0.2em"
+			><code class="hljs jsx" data-trim><script type="text/template">
+				{
+					"Repository:1": {
+						"id": 1,
+						"url": "https://github.com/apollographql/apollo-client",
+						"owner": {
+							"ref": "Organization:1",
+						}
+					},
+					"Organization:1": {
+						"id: 1",
+						"name": "apollographql",
+						"url": "https://github.com/apollographql"
+					}
+				}
+				</script></code></pre>
+			</div>
+        </section>
+
+        <section data-auto-animate="">
+          <p class="subtitle">
+            Will the second query's result be read from
+            the cache or requested over the network?
+          </p>
+
+          <pre
+            data-id="code-animation" 	style="font-size: 0.2em"
+          ><code class="hljs jsx" data-trim><script type="text/template">
+						import { gql, useQuery } from "@apollo/client"
+
+						const getRepo = gql`
+							query Repo($name: String!, $owner: String!) {
+								repository(name: $name, owner: $owner) {
+									id
+									url
+									owner {
+										... on Organization {
+											id
+											name
+											url
+										}
+									}
+								}
+							}
+						`
+
+						const getOrg = gql`
+							query Org($login: String!) {
+								organization(login: $login) {
+									id
+									name
+									url
+							}
+						`
+						
+						function Component({ id }) {
+							useQuery(getRepo, { variables: {name: "apollo", owner: "apollographql"}})
+							useQuery(getOrg, { variables: {login: "apollographql"}})
+						
+							// ...
+						}
+						
+				</script></code></pre>
+        </section>
+
+        <section data-auto-animate>
+          <p class="subtitle" style="font-size: 0.6em">
+            What will be stored in the cache after the
+            user clicks the button?
+          </p>
+          <img
+            src="dist/assets/stars.png"
+            height="30px"
+            style="margin: 0"
+          />
+
+          <pre
+            data-id="code-animation"
+            style="font-size: 0.2em"
+          ><code class="hljs jsx" data-trim><script type="text/template">
+						import { gql, useQuery } from "@apollo/client"
+
+						const getRepo = gql`
+							query Repo($name: String!, $owner: String!) {
+								repository(name: $name, owner: $owner) {
+									id
+									stargazerCount
+								}
+							}
+						`
+
+						const starRepo = gql`
+							mutation StarRepo($id: ID!) {
+								addStar(input: { starrableId: $id }) {
+									starrable {
+										... on Repository {
+											homepageUrl
+											stargazerCount
+										}
+									}
+								}
+							}
+						`
+						
+						function StarButton() {
+							const {data, loading, error} = useQuery(getRepo, { variables: {name: "apollo", owner: "apollographql"}})
+							const [addStar, result] = useMutation(starRepo)
+
+							if (loading) return "Loading…"
+							if (error) return "Failed to load"
+
+							return (
+								<button
+									onClick={() => addStar({ variables: { id: data.repository.id } })}
+								>
+									⭐️
+								</button>
+							)
+						}		
+						</script></code></pre>
+        </section>
+
+
+
+        <section data-auto-animate>
+          <p class="subtitle" style="font-size: 0.6em">
+            What will be stored in the cache after the
+            user clicks the button?
+          </p>
+					<img
+            src="dist/assets/stars.png"
+            height="30px"
+            style="margin: 0"
+          />
+					<div style="display: flex; flex-direction: row;">
+          <pre
+            data-id="code-animation"
+            style="font-size: 0.2em"
+          ><code class="hljs jsx" data-trim><script type="text/template">
+						import { gql, useQuery } from "@apollo/client"
+
+						const getRepo = gql`
+							query Repo($name: String!, $owner: String!) {
+								repository(name: $name, owner: $owner) {
+									id
+									stargazerCount
+								}
+							}
+						`
+
+						const starRepo = gql`
+							mutation StarRepo($id: ID!) {
+								addStar(input: { starrableId: $id }) {
+									starrable {
+										... on Repository {
+											homepageUrl
+											stargazerCount
+										}
+									}
+								}
+							}
+						`
+						
+						function StarButton() {
+							const {data, loading, error} = useQuery(getRepo, { variables: {name: "apollo", owner: "apollographql"}})
+							const [addStar, result] = useMutation(starRepo)
+
+							if (loading) return "Loading…"
+							if (error) return "Failed to load"
+
+							return (
+								<button
+									onClick={() => addStar({ variables: { id: data.repository.id } })}
+								>
+									⭐️
+								</button>
+							)
+						}		
+						</script></code></pre>
+          <pre
+            data-id="code-animation" style="max-width: 350px; padding-left: 8px; font-size: 0.2em"
+          ><code class="hljs jsx" data-trim><script type="text/template">
+						{
+							"Repository:1": {
+								"id": 1,
+								"stargazerCount": 0
+							}
+						}
+						</script></code></pre>
+					</div>
+        </section>
+
+        <section>
+          <h2 data-id="code-title">Mocking</h2>
+          <p class="subtitle">Introspection Query</p>
+          <pre
+            data-id="code-animation"
+          ><code class="hljs graphql" data-trim data-line-numbers="|"><script type="text/template">
 					query IntrospectionQuery {
 						__schema {
 							queryType { name }
@@ -366,12 +837,16 @@
 						}
 					}
 				</script></code></pre>
-			</section>
+        </section>
 
-			<section data-auto-animate>
-				<h2 data-id="code-title">Mocking</h2>
-				<p><code>@graphql-tools/mock</code></p>
-				<pre data-id="code-animation"><code class="hljs jsx" data-trim data-line-numbers="|2|5-8|"><script type="text/template">
+        <section data-auto-animate>
+          <h2 data-id="code-title">Mocking</h2>
+          <p class="subtitle">
+            <code>@graphql-tools/mock</code>
+          </p>
+          <pre
+            data-id="code-animation"
+          ><code class="hljs jsx" data-trim data-line-numbers="|2|5-8|"><script type="text/template">
 					import { buildClientSchema } from "graphql"
 					import * as introspectionResult from "schema.json"
 
@@ -382,12 +857,14 @@
 					})
 
 				</script></code></pre>
-			</section>
+        </section>
 
-			<section data-auto-animate>
-				<h2 data-id="code-title">Mocking</h2>
-				<p>Type Mocks</p>
-				<pre data-id="code-animation"><code class="hljs jsx" data-trim data-line-numbers="|4-12|15-18|"><script type="text/template">
+        <section data-auto-animate>
+          <h2 data-id="code-title">Mocking</h2>
+          <p>Type Mocks</p>
+          <pre
+            data-id="code-animation"
+          ><code class="hljs jsx" data-trim data-line-numbers="|4-12|15-18|"><script type="text/template">
 					import { buildClientSchema } from "graphql"
 					import * as introspectionResult from "schema.json"
 
@@ -407,12 +884,16 @@
 						mocks,
 					})
 				</script></code></pre>
-			</section>
+        </section>
 
-			<section data-auto-animate>
-				<h2 data-id="code-title">Mocking</h2>
-				<p>Query and Mutation Results</p>
-				<pre data-id="code-animation"><code class="hljs jsx" data-trim data-line-numbers="|24|5|6|6-8|9-11|4|13|14-18|"><script type="text/template">
+        <section data-auto-animate>
+          <h2 data-id="code-title">Mocking</h2>
+          <p class="subtitle">
+            Query and Mutation Results
+          </p>
+          <pre
+            data-id="code-animation"
+          ><code class="hljs jsx" data-trim data-line-numbers="|24|5|6|6-8|9-11|4|13|14-18|"><script type="text/template">
 					import { buildClientSchema } from "graphql"
 					import * as introspectionResult from "schema.json"
 
@@ -441,25 +922,16 @@
 						resolvers,
 					})
 				</script></code></pre>
-			</section>
+        </section>
 
-			<section data-markdown>
-				<textarea data-template>
-					## Caching
-					Apollo Normalized Cache
-					- Responses are stored in a *local*, *normalized*, *in-memory* cache
-					- Objects are identified by their `__typename` and `id` fields 
-
-						(e.g. `Person:2eoufhasdfa`)
-					- Objects are stored in a *flat lookup table*
-
-				</textarea>
-			</section>
-
-			<section data-auto-animate>
-				<h2 data-id="code-title">Type Policies</h2>
-				<p>Transform response fields</p>
-				<pre data-id="code-animation"><code class="hljs jsx" data-trim data-line-numbers="|24|5|6|6-8|9-11|4|13|14-18|"><script type="text/template">
+        <section data-auto-animate>
+          <h2 data-id="code-title">Type Policies</h2>
+          <p class="subtitle">
+            Transform response fields
+          </p>
+          <pre
+            data-id="code-animation"
+          ><code class="hljs jsx" data-trim data-line-numbers="|24|5|6|6-8|9-11|4|13|14-18|"><script type="text/template">
 					const cache = new InMemoryCache({
 						typePolicies: {
 							User: {
@@ -472,12 +944,16 @@
 						},
 					});
 				</script></code></pre>
-			</section>
+        </section>
 
-			<section data-auto-animate>
-				<h2 data-id="code-title">Type Policies</h2>
-				<p>Calculate client-side data</p>
-				<pre data-id="code-animation"><code class="hljs jsx" data-trim data-line-numbers="|24|5|6|6-8|9-11|4|13|14-18|"><script type="text/template">
+        <section data-auto-animate>
+          <h2 data-id="code-title">Type Policies</h2>
+          <p class="subtitle">
+            Calculate client-side data
+          </p>
+          <pre
+            data-id="code-animation"
+          ><code class="hljs jsx" data-trim data-line-numbers="|24|5|6|6-8|9-11|4|13|14-18|"><script type="text/template">
 					const cache = new InMemoryCache({
 						typePolicies: {
 							User: {
@@ -504,12 +980,14 @@
 						}
 					`
 				</script></code></pre>
-			</section>
+        </section>
 
-			<section data-auto-animate>
-				<h2 data-id="code-title">Type Policies</h2>
-				<p>References</p>
-				<pre data-id="code-animation"><code class="hljs jsx" data-trim data-line-numbers="|24|5|6|6-8|9-11|4|13|14-18|"><script type="text/template">
+        <section data-auto-animate>
+          <h2 data-id="code-title">Type Policies</h2>
+          <p class="subtitle">References</p>
+          <pre
+            data-id="code-animation"
+          ><code class="hljs jsx" data-trim data-line-numbers="|24|5|6|6-8|9-11|4|13|14-18|"><script type="text/template">
 					const cache = new InMemoryCache({
 						typePolicies: {
 							User: {
@@ -537,72 +1015,126 @@
 						}
 					`
 				</script></code></pre>
-			</section>
-		</div>
-	</div>
+        </section>
+      </div>
+    </div>
 
+    <script src="dist/reveal.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/languages/graphql.min.js"></script> -->
 
+    <script>
+      // More info about initialization & config:
+      // - https://revealjs.com/initialization/
+      // - https://revealjs.com/config/
+      const regex = {
+        source(re) {
+          if (!re) return null
+          if (typeof re === "string") return re
 
-	<script src="dist/reveal.js"></script>
-	<script src="plugin/notes/notes.js"></script>
-	<script src="plugin/markdown/markdown.js"></script>
-	<script src="plugin/highlight/highlight.js"></script>
-	<script src="plugin/highlight/highlight.js"></script>
-	<!-- <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/languages/graphql.min.js"></script> -->
+          return re.source
+        },
 
+        concat(...args) {
+          const joined = args
+            .map((x) => regex.source(x))
+            .join("")
+          return joined
+        },
 
-	<script>
-		// More info about initialization & config:
-		// - https://revealjs.com/initialization/
-		// - https://revealjs.com/config/
-		const regex = {
-			source(re) {
-				if (!re) return null;
-				if (typeof re === "string") return re;
+        lookahead(re) {
+          return regex.concat("(?=", re, ")")
+        },
+      }
 
-				return re.source;
-			},
+      Reveal.initialize({
+        highlight: {
+          beforeHighlight: (hljs) =>
+            hljs.registerLanguage(
+              "graphql",
+              function (hljs) {
+                return {
+                  name: "GraphQL",
+                  aliases: ["gql"],
+                  case_insensitive: !0,
+                  disableAutodetect: !1,
+                  keywords: {
+                    keyword: [
+                      "query",
+                      "mutation",
+                      "subscription",
+                      "type",
+                      "input",
+                      "schema",
+                      "directive",
+                      "interface",
+                      "union",
+                      "scalar",
+                      "fragment",
+                      "enum",
+                      "on",
+                    ],
+                    literal: ["true", "false", "null"],
+                  },
+                  contains: [
+                    hljs.HASH_COMMENT_MODE,
+                    hljs.QUOTE_STRING_MODE,
+                    hljs.NUMBER_MODE,
+                    {
+                      scope: "punctuation",
+                      match: /[.]{3}/,
+                      relevance: 0,
+                    },
+                    {
+                      scope: "punctuation",
+                      begin:
+                        /[\!\(\)\:\=\[\]\{\|\}]{1}/,
+                      relevance: 0,
+                    },
+                    {
+                      scope: "variable",
+                      begin: /\$/,
+                      end: /\W/,
+                      excludeEnd: !0,
+                      relevance: 0,
+                    },
+                    {
+                      scope: "meta",
+                      match: /@\w+/,
+                      excludeEnd: !0,
+                    },
+                    {
+                      scope: "symbol",
+                      begin: regex.concat(
+                        /[_A-Za-z][_0-9A-Za-z]*/,
+                        regex.lookahead(/\s*:/)
+                      ),
+                      relevance: 0,
+                    },
+                  ],
+                  illegal: [/[;<']/, /BEGIN/],
+                }
+              }
+            ),
+        },
+        hash: true,
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [
+          RevealMarkdown,
+          RevealHighlight,
+          RevealNotes,
+        ],
 
-			concat(...args) {
-				const joined = args.map((x) => regex.source(x)).join("");
-				return joined;
-			},
+        width: 960,
+        height: 600,
 
-			lookahead(re) {
-				return regex.concat('(?=', re, ')');
-			}
-		}
-
-		Reveal.initialize({
-			highlight: {
-				beforeHighlight: hljs => hljs.registerLanguage("graphql", function (hljs) {
-					return {
-						name: "GraphQL",
-						aliases: ["gql"], case_insensitive: !0, disableAutodetect: !1, keywords: {
-							keyword: ["query", "mutation", "subscription", "type", "input", "schema", "directive", "interface", "union", "scalar", "fragment", "enum", "on"],
-							literal: ["true", "false", "null"]
-						},
-						contains: [hljs.HASH_COMMENT_MODE, hljs.QUOTE_STRING_MODE, hljs.NUMBER_MODE, {
-							scope: "punctuation", match: /[.]{3}/, relevance: 0
-						}, {
-							scope: "punctuation",
-							begin: /[\!\(\)\:\=\[\]\{\|\}]{1}/, relevance: 0
-						}, {
-							scope: "variable", begin: /\$/,
-							end: /\W/, excludeEnd: !0, relevance: 0
-						}, { scope: "meta", match: /@\w+/, excludeEnd: !0 }, {
-							scope: "symbol", begin: regex.concat(/[_A-Za-z][_0-9A-Za-z]*/, regex.lookahead(/\s*:/)),
-							relevance: 0
-						}], illegal: [/[;<']/, /BEGIN/]
-					}
-				})
-			},
-			hash: true,
-			// Learn about plugins: https://revealjs.com/plugins/
-			plugins: [RevealMarkdown, RevealHighlight, RevealNotes],
-		})
-	</script>
-
-</body>
-
+        // Factor of the display size that should remain empty around
+        // the content
+        margin: 0.04,
+      })
+    </script>
+  </body>
 </html>
