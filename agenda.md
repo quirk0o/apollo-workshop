@@ -2,10 +2,7 @@
 
 1. Queries and Mutations
 2. The GraphQL Document
-3. Fragments
-4. Interfaces and Unions
-5. Pagination
-6. Advanced: Caching & Type Policies
-7. Advanced: Links
-8. Advanced: Mocking
-9.  Conventions
+3. Interfaces and Unions
+4. Fragments
+5. Field Policies - Primer
+6. Pagination - Primer
