@@ -128,6 +128,10 @@
 						}
 
 					</script></code></pre>
+
+          <aside class="notes">
+            Quick recap of queries
+          </aside>
         </section>
 
         <section data-auto-animate>
@@ -165,6 +169,10 @@
 						}
 
 					</script></code></pre>
+
+          <aside class="notes">
+            Quick recap of variables
+          </aside>
         </section>
 
         <section data-auto-animate>
@@ -195,6 +203,10 @@
 						}
 
 					</script></code></pre>
+
+          <aside class="notes">
+            Quick recap of state
+          </aside>
         </section>
 
         <section data-auto-animate>
@@ -226,6 +238,10 @@
 						)
 					}
 					</script></code></pre>
+
+          <aside class="notes">
+            This is available - use it!
+          </aside>
         </section>
 
         <section data-markdown>
@@ -233,9 +249,18 @@
 						## Exercise time!
 						Write a query <!-- .element: class="subtitle" -->
 
-						Display the current user’s list of open pull requests
+						Display the current user’s list of open pull requests.
 
-						**Branch**: `2-write-a-query-template`
+						**Branch: `1-write-a-query-template`**
+
+						----
+						*Hint: Use the `viewer` field to access queries for the current user* <!-- .element: class="hint" -->
+
+						Note:
+						- Introduce Apollo Studio
+						- Show the desired end result in the app
+						- Apollo Studio query: MyOpenPullRequests
+
 					</textarea
           >
         </section>
@@ -276,6 +301,14 @@
 						)
 					}
 					</script></code></pre>
+
+          <aside class="notes">
+            - Difference between useQuery and
+            useMutation - Lazy execution of mutations -
+            How to pass variables - How the cache is
+            updated and why this won't display the most
+            recent result
+          </aside>
         </section>
 
         <section data-auto-animate>
@@ -307,6 +340,13 @@
 						}
 					}
 				</script></code></pre>
+
+          <aside class="notes">
+            - The document is what is sent to the
+            server - The default operation is a query
+            (without the query keyword) - Only a single
+            unnamed operation can be sent in a document
+          </aside>
         </section>
 
         <section data-auto-animate>
@@ -347,6 +387,14 @@
 						}
 					}
 				</script></code></pre>
+
+          <aside class="notes">
+            - The document can contain multiple
+            operations or fragments (query, mutation or
+            subscription) - They must be named - The
+            result is always a single object with the
+            name of the operation as the key
+          </aside>
         </section>
 
         <section data-markdown>
@@ -358,7 +406,12 @@
 						* it should be marked as a draft **and**
 						* the title should be prefixed with "I'M NOT DONE WITH THIS!"
 
-						**Branch**: `1-write-a-mutation-template`
+						**Branch: `2-write-a-mutation-template`**
+
+						Note:
+						- Show the desired result in the app
+						- Show how to create a PR from Apollo Studio
+						- Apollo Studio Query: ConvertPullRequestToDraf
 					</textarea
           >
         </section>
@@ -404,6 +457,14 @@
 						}
 						
 					</script></code></pre>
+
+          <aside class="notes">
+            - Interfaces are a way to describe the
+            shape of a type - The implementing type
+            must also include those fields - Showcase
+            types in GraphQL schema - Apollo Studio
+            Query: StarRepo
+          </aside>
         </section>
 
         <section>
@@ -444,6 +505,13 @@
 						${ProfileFragment}
 					`
 				</script></code></pre>
+
+          <aside class="notes">
+            - Fragments are used to share fields
+            between operations - They can also be
+            defined on interfaces - showcase in AS -
+            Apollo Studio Query: CurrentUser
+          </aside>
         </section>
 
         <section data-markdown>
@@ -456,6 +524,8 @@
 						(e.g. `Person:12345`)
 					- Objects are stored in a *flat lookup table*
 
+					Note:
+					Showcase DevTools in OneRead
 				</textarea
           >
         </section>
@@ -469,6 +539,9 @@
 					- Otherwise, the request is sent to the server
 
 					[Fetch Policies](https://www.apollographql.com/docs/react/data/queries/#setting-a-fetch-policy)
+
+					Note:
+					Describe different fetch policies and the default
 				</textarea
           >
         </section>
@@ -486,7 +559,7 @@
 
         <section data-markdown>
           <textarea data-template>
-					## Puzzle Time!
+					## Quiz Time!
 				</textarea
           >
         </section>
@@ -798,6 +871,9 @@
 						* customize the way data is read and written to the cache
 
 						[API Reference](https://www.apollographql.com/docs/react/caching/cache-field-behavior#fieldpolicy-api-reference)
+
+						Note:
+						the field policy API provides a lot of tools to interact directly with the cache
 					</textarea
           >
         </section>
@@ -827,6 +903,14 @@
 						},
 					});
 				</script></code></pre>
+
+          <aside class="notes">
+            - read is called whenever the field is read
+            from the cache - shortcut when not defining
+            anything else but the read function - the
+            returned value will always be returned from
+            requests regardless of fetch policy
+          </aside>
         </section>
 
         <section data-auto-animate>
@@ -863,6 +947,12 @@
 						}
 					`
 				</script></code></pre>
+
+          <aside class="notes">
+            - readField can be used to read fields from
+            the cache that belong to the same parent
+            object (the user in this case)
+          </aside>
         </section>
 
         <section data-markdown>
@@ -872,9 +962,10 @@
 
 						Compute the complexity score for your PRs.
 
-						**Branch**: `3-write-a-field-policy-template`
+						**Branch: `3-write-a-field-policy-template`**
 
-						My score "formula"
+						----
+						My score "formula" <!-- .element: class="hint" -->
 						```js
 Math.floor(
 	Math.abs(additions - deletions) / 100 +
@@ -905,6 +996,13 @@ Math.floor(
 						},
 					});
 				</script></code></pre>
+
+          <aside class="notes">
+            - merge is called whenever a field is
+            updated in the cache - you can decide what
+            ends up written to the cache based on the
+            previous and new value
+          </aside>
         </section>
 
         <section data-auto-animate>
@@ -967,6 +1065,75 @@ Math.floor(
 							)
 						}
 				</script></code></pre>
+
+          <aside class="notes">
+            - when calling fetchMore you can provide
+            new variables for the query - Apollo
+            reexecutes this query
+          </aside>
+        </section>
+
+        <section data-markdown>
+          <textarea data-template>
+						## Exercise time!
+						Paginate results <!-- .element: class="subtitle" -->
+
+						Fetch the next page of PRs when clicking "Load More".
+
+						**Branch: `4-paginate-results-template`**
+
+						Note:
+						Let me know once the request is sent - is it updating the list?
+
+						- since queries are cached with all their arguments, this is just saved as a separate result in the cache
+						- it doesn't append to the previous query's result
+						- we need to write a field policy that will merge the results
+						- we could use the previous merge example
+					</textarea
+          >
+        </section>
+
+        <section data-auto-animate>
+          <h2 data-id="code-title">Pagination</h2>
+          <p class="subtitle">
+            <code>relayStylePagination</code>
+          </p>
+          <pre
+            data-id="code-animation"
+          ><code class="hljs jsx" data-trim data-line-numbers=""><script type="text/template">
+						const cache = new InMemoryCache({
+							typePolicies: {
+								User: {
+									fields: {
+										pullRequests: relayStylePagination()
+									}
+								}
+							}
+						})
+				</script></code></pre>
+
+          <aside class="notes">
+            but Apollo provides us with a built-in
+            policy for cursor pagination
+          </aside>
+        </section>
+
+        <section data-markdown>
+          <textarea data-template>
+						## Exercise time!
+						Paginate results <!-- .element: class="subtitle" -->
+
+						Display all loaded PR pages.
+
+						**Branch: `4-paginate-results-checkpoint-a`**
+
+						Note:
+						Why is this broken now?
+
+						- by default the relay style pagination assumes all query arguments are pagination arguments
+						- enter keyArgs
+					</textarea
+          >
         </section>
 
         <section data-auto-animate>
@@ -1010,36 +1177,23 @@ Math.floor(
 						`
 						
 				</script></code></pre>
-        </section>
 
-        <section data-auto-animate>
-          <h2 data-id="code-title">Pagination</h2>
-          <p class="subtitle">
-            <code>relayStylePagination</code>
-          </p>
-          <pre
-            data-id="code-animation"
-          ><code class="hljs jsx" data-trim data-line-numbers=""><script type="text/template">
-						const cache = new InMemoryCache({
-							typePolicies: {
-								User: {
-									fields: {
-										pullRequests: relayStylePagination()
-									}
-								}
-							}
-						})
-				</script></code></pre>
+          <aside class="notes">
+            - keyArgs define which arguments should be
+            used to generate the cache key -
+            relayStylePagination accepts them as an
+            argument
+          </aside>
         </section>
 
         <section data-markdown>
           <textarea data-template>
-						## Exercise time!
+						## Final exercise time!
 						Paginate results <!-- .element: class="subtitle" -->
 
-						Paginate the list of PRs using cursors.
+						Actually display all loaded PR pages for all PR states.
 
-						**Branch**: `4-paginate-results-template`
+						**Branch: `4-paginate-results-checkpoint-b`**
 					</textarea
           >
         </section>
@@ -1073,6 +1227,15 @@ Math.floor(
 						})
 						
 				</script></code></pre>
+
+          <aside class="notes">
+            - we can return a reference to another
+            object from a read policy - we can also
+            read fields from other objects in the cache
+            instead of the parent by providing the
+            reference - mention other read field
+            arguments for working with references
+          </aside>
         </section>
 
         <section data-auto-animate>
@@ -1120,6 +1283,16 @@ Math.floor(
 					}
 					`
 				</script></code></pre>
+
+          <aside class="notes">
+            - we can use field policies to improve
+            caching for objects that we know are
+            already in the cache but apollo doesn't
+            recognize - we know that the second query
+            will fetch the same data as the first, so
+            we can use a cache redirect to avoid
+            unnecessary network requests
+          </aside>
         </section>
 
         <!---<section>
