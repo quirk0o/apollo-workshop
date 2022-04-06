@@ -171,7 +171,8 @@
 					</script></code></pre>
 
           <aside class="notes">
-            Quick recap of variables
+            Quick recap of variables - must start with
+            dollar sign
           </aside>
         </section>
 
@@ -981,7 +982,7 @@ Math.floor(
           <p class="subtitle">Update cache data</p>
           <pre
             data-id="code-animation"
-          ><code class="hljs jsx" data-trim data-line-numbers="|5-10|22|"><script type="text/template">
+          ><code class="hljs jsx" data-trim data-line-numbers="|5-10"><script type="text/template">
 					const cache = new InMemoryCache({
 						typePolicies: {
 							User: {
@@ -1012,7 +1013,7 @@ Math.floor(
           </p>
           <pre
             data-id="code-animation"
-          ><code class="hljs jsx" data-trim data-line-numbers="|4|7-8|20-25|33-36|46-48|38-40|"><script type="text/template">
+          ><code class="hljs jsx" data-trim data-line-numbers="|4|7-8|20-25|33-36|46-48|40-42|"><script type="text/template">
 						import { gql, useQuery } from "@apollo/client"
 
 						const OpenPullRequestsQuery = gql`
@@ -1049,12 +1050,12 @@ Math.floor(
 								OpenPullRequestsQuery,
 								{ variables: { first: PAGE_SIZE } }
 							)
+							
+							const pageInfo = data.viewer.pageInfo
 
 							const onLoad = (cursor) => {
 								fetchMore({ after: pageInfo.endCursor })
 							}
-
-							const pageInfo = data.viewer.pageInfo
 
 							return (
 								<div>
@@ -1244,7 +1245,7 @@ Math.floor(
 
           <pre
             data-id="code-animation"
-          ><code class="hljs jsx" data-trim data-line-numbers="|5-10|22|"><script type="text/template">
+          ><code class="hljs jsx" data-trim data-line-numbers="|18-26|30-36|6-9|"><script type="text/template">
 					const cache = new InMemoryCache({
 						typePolicies: {
 							Query: {
