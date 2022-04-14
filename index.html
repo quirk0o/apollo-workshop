@@ -100,7 +100,71 @@
           </div>
         </section>
 
-        <section data-markdown="agenda.md"></section>
+        <section data-markdown>
+          <textarea data-template>
+						## In the previous episode
+
+						1. Queries and Mutations
+						2. The GraphQL Document
+						3. Interfaces and Unions
+						4. Fragments
+						5. Field Policies - Primer
+					</textarea
+          >
+        </section>
+
+        <section data-markdown>
+          <textarea data-template>
+						## Coming up
+
+						1. Pagination
+						2. More field policies
+						3. Mocking
+						4. Network layer
+					</textarea
+          >
+        </section>
+
+        <section data-auto-animate>
+          <h2>Rules</h2>
+
+          <p>If you're stuck:</p>
+          <ul>
+            <li class="fragment">
+              Please, avoid talking during exercises
+              unless you're sure it will be useful to
+              the entire group
+            </li>
+            <li class="fragment">
+              Write a message on the
+              <code>apollo-workshop</code> Slack
+              channel with your code and I'll try to
+              help
+            </li>
+            <li class="fragment">
+              Check the solution branch for help
+              (replace <code>template</code> with
+              <code>solution</code> in the exercise
+              branch name) e.g.
+              <code>1-write-a-query-solution</code>
+            </li>
+          </ul>
+        </section>
+
+        <section data-auto-animate>
+          <h2>Rules</h2>
+          <p>To tell me you're ready to proceed:</p>
+          <ul>
+            <li class="fragment">
+              For each exercise I'll add a message with
+              it's number on Slack
+            </li>
+            <li class="fragment">
+              React with ✅ to notify me that you're
+              done
+            </li>
+          </ul>
+        </section>
 
         <section>
           <h2 data-id="code-title">
@@ -176,73 +240,72 @@
           </aside>
         </section>
 
-        <section data-auto-animate>
-          <h2 data-id="code-title">
-            Query Operations
-          </h2>
-          <p class="subtitle">State</p>
-          <pre
-            data-id="code-animation"
-          ><code class="hljs jsx" data-trim data-line-numbers="|12-15"><script type="text/template">
-						import { gql, useQuery } from "@apollo/client"
-
-						const Query = gql`
-							query User {
-								viewer {
-									login
+        <section>
+          <section data-auto-animate>
+            <h2 data-id="code-title">
+              Query Operations
+            </h2>
+            <p class="subtitle">State</p>
+            <pre
+              data-id="code-animation"
+            ><code class="hljs jsx" data-trim data-line-numbers="|12-15"><script type="text/template">
+							import { gql, useQuery } from "@apollo/client"
+	
+							const Query = gql`
+								query User {
+									viewer {
+										login
+									}
 								}
+							`
+	
+							function Nav() {
+								const { loading, error, data } = useQuery(Query)
+	
+								if (loading) return "Loading…"
+								if (error) return "Failed to load"
+	
+								return <nav>Hello ${data.viewer.login}</nav>
 							}
-						`
-
-						function Nav() {
-							const { loading, error, data } = useQuery(Query)
-
-							if (loading) return "Loading…"
-							if (error) return "Failed to load"
-
-							return <nav>Hello ${data.viewer.login}</nav>
-						}
-
-					</script></code></pre>
-
-          <aside class="notes">
-            Quick recap of state
-          </aside>
-        </section>
-
-        <section data-auto-animate>
-          <h2 data-id="code-title">
-            Query Operations
-          </h2>
-          <p class="subtitle">State Helpers</p>
-          <pre><code class="hljs jsx" data-trim><script type="text/template">
-					// api/graph/helpers.js
-
-					const queryResultToStatus = ({
-						loading,
-						error,
-						called,
-						data,
-					}) => {
-						if (!called) return QueryStatus.Idle
-						if (loading) return QueryStatus.Loading
-						if (error) return QueryStatus.Error
-						if (data) return QueryStatus.Success
-						throw new Error(
-							"Apollo query resulted in an unexpected state: ",
-							{
-								called,
+	
+										</script></code></pre>
+            <aside class="notes">
+              Quick recap of state
+            </aside>
+          </section>
+          <section data-auto-animate>
+            <h2 data-id="code-title">
+              Query Operations
+            </h2>
+            <p class="subtitle">State Helpers</p>
+            <pre><code class="hljs jsx" data-trim><script type="text/template">
+							// api/graph/helpers.js
+		
+							const queryResultToStatus = ({
 								loading,
 								error,
+								called,
 								data,
+							}) => {
+								if (!called) return QueryStatus.Idle
+								if (loading) return QueryStatus.Loading
+								if (error) return QueryStatus.Error
+								if (data) return QueryStatus.Success
+								throw new Error(
+									"Apollo query resulted in an unexpected state: ",
+									{
+										called,
+										loading,
+										error,
+										data,
+									}
+								)
 							}
-						)
-					}
-					</script></code></pre>
-
-          <aside class="notes">
-            This is available - use it!
-          </aside>
+							</script></code></pre>
+            <aside class="notes">
+              This is available - use it!
+            </aside>
+          </section>
         </section>
 
         <section data-markdown>
@@ -255,6 +318,8 @@
 						**Branch: `1-write-a-query-template`**
 
 						----
+						Don't worry about pagination at this stage, you can just display the 10 most recent pull requests.
+
 						*Hint: Use the `viewer` field to access queries for the current user* <!-- .element: class="hint" -->
 
 						Note:
@@ -408,6 +473,9 @@
 						* the title should be prefixed with "I'M NOT DONE WITH THIS!"
 
 						**Branch: `2-write-a-mutation-template`**
+
+						----
+						*Hint: Use the `convertPullRequestToDraft` mutation to convert to draft and the `updatePullRequest` mutation to update the title.* <!-- .element: class="hint" -->
 
 						Note:
 						- Show the desired result in the app
@@ -565,126 +633,129 @@
           >
         </section>
 
-        <section data-auto-animate="">
-          <p class="subtitle">
-            Given the two queries below, what will be
-            stored in the cache?
-          </p>
-
-          <pre
-            data-id="code-animation"
-            style="font-size: 0.26em"
-          ><code class="hljs jsx" data-trim><script type="text/template">
-						import { gql, useQuery } from "@apollo/client"
-
-						const RepoQuery = gql`
-							query Repo($name: String!, $owner: String!) {
-								repository(name: $name, owner: $owner) {
-									id
-									url
-									owner {
-										... on Organization {
-											id
-											name
-										}
-									}
-								}
-							}
-						`
-
-						const OrgQuery = gql`
-							query Org($login: String!) {
-								organization(login: $login) {
-									id
-									name
-									url
-									avatarUrl
-							}
-						`
-						
-						function Component({ id }) {
-							useQuery(RepoQuery, { variables: {name: "apollo", owner: "apollographql"}})
-							useQuery(OrgQuery, { variables: {login: "apollographql"}})
-						
-							// ...
-						}
-						
-				</script></code></pre>
-        </section>
-
-        <section data-auto-animate="">
-          <p class="subtitle">
-            Given the two queries below, what will be
-            stored in the cache?
-          </p>
-          <div
-            style="display: flex; flex-direction: row"
-          >
+        <section>
+          <section data-auto-animate="">
+            <p class="subtitle">
+              Given the two queries below, what will be
+              stored in the cache?
+            </p>
             <pre
               data-id="code-animation"
               style="font-size: 0.26em"
             ><code class="hljs jsx" data-trim><script type="text/template">
-							import { gql, useQuery } from "@apollo/client"
-
-							const RepoQuery = gql`
-								query Repo($name: String!, $owner: String!) {
-									repository(name: $name, owner: $owner) {
-										id
-										url
-										owner {
-											... on Organization {
-												id
-												name
+											import { gql, useQuery } from "@apollo/client"
+					
+											const RepoQuery = gql`
+												query Repo($name: String!, $owner: String!) {
+													repository(name: $name, owner: $owner) {
+														id
+														url
+														owner {
+															... on Organization {
+																id
+																name
+															}
+														}
+													}
+												}
+											`
+					
+											const OrgQuery = gql`
+												query Org($login: String!) {
+													organization(login: $login) {
+														id
+														name
+														url
+														avatarUrl
+												}
+											`
+											
+											function Component({ id }) {
+												useQuery(RepoQuery, { variables: {name: "apollo", owner: "apollographql"}})
+												useQuery(OrgQuery, { variables: {login: "apollographql"}})
+											
+												// ...
 											}
+											
+									</script></code></pre>
+          </section>
+          <section data-auto-animate="">
+            <p class="subtitle">
+              Given the two queries below, what will be
+              stored in the cache?
+            </p>
+            <div
+              style="
+                display: flex;
+                flex-direction: row;
+              "
+            >
+              <pre
+                data-id="code-animation"
+                style="font-size: 0.26em"
+              ><code class="hljs jsx" data-trim><script type="text/template">
+												import { gql, useQuery } from "@apollo/client"
+					
+												const RepoQuery = gql`
+													query Repo($name: String!, $owner: String!) {
+														repository(name: $name, owner: $owner) {
+															id
+															url
+															owner {
+																... on Organization {
+																	id
+																	name
+																}
+															}
+														}
+													}
+												`
+						
+												const OrgQuery = gql`
+													query Org($login: String!) {
+														organization(login: $login) {
+															id
+															name
+															url
+															avatarUrl
+													}
+												`
+												
+												function Component({ id }) {
+													useQuery(RepoQuery, { variables: {name: "apollo", owner: "apollographql"}})
+													useQuery(OrgQuery, { variables: {login: "apollographql"}})
+												
+													// ...
+												}
+									</script></code></pre>
+              <pre
+                data-id="code-animation"
+                style="
+                  max-width: 350px;
+                  padding-left: 8px;
+                  font-size: 0.26em;
+                "
+              ><code class="hljs jsx" data-trim><script type="text/template">
+									{
+										"Repository:1": {
+											"__typename": "Repository",
+											"id": 1,
+											"url": "https://github.com/apollographql/apollo-client",
+											"owner": {
+												"__ref": "Organization:1",
+											}
+										},
+										"Organization:1": {
+											"__typename": "Organization",
+											"id: 1",
+											"name": "apollographql",
+											"url": "https://github.com/apollographql",
+											"avatarUrl": "https://avatars.githubusercontent.com/u/17189275?s=200&v=4"
 										}
 									}
-								}
-							`
-	
-							const OrgQuery = gql`
-								query Org($login: String!) {
-									organization(login: $login) {
-										id
-										name
-										url
-										avatarUrl
-								}
-							`
-							
-							function Component({ id }) {
-								useQuery(RepoQuery, { variables: {name: "apollo", owner: "apollographql"}})
-								useQuery(OrgQuery, { variables: {login: "apollographql"}})
-							
-								// ...
-							}
-				</script></code></pre>
-            <pre
-              data-id="code-animation"
-              style="
-                max-width: 350px;
-                padding-left: 8px;
-                font-size: 0.26em;
-              "
-            ><code class="hljs jsx" data-trim><script type="text/template">
-				{
-					"Repository:1": {
-						"__typename": "Repository",
-						"id": 1,
-						"url": "https://github.com/apollographql/apollo-client",
-						"owner": {
-							"__ref": "Organization:1",
-						}
-					},
-					"Organization:1": {
-						"__typename": "Organization",
-						"id: 1",
-						"name": "apollographql",
-						"url": "https://github.com/apollographql",
-						"avatarUrl": "https://avatars.githubusercontent.com/u/17189275?s=200&v=4"
-					}
-				}
-				</script></code></pre>
-          </div>
+									</script></code></pre>
+            </div>
+          </section>
         </section>
 
         <section data-auto-animate="">
@@ -733,136 +804,145 @@
 				</script></code></pre>
         </section>
 
-        <section data-auto-animate>
-          <p class="subtitle" style="font-size: 0.6em">
-            What will be stored in the cache after the
-            user clicks the button?
-          </p>
-          <img
-            src="dist/assets/stars.png"
-            height="30px"
-            style="margin: 0"
-          />
-
-          <pre
-            data-id="code-animation"
-            style="font-size: 0.26em"
-          ><code class="hljs jsx" data-trim><script type="text/template">
-						import { gql, useQuery } from "@apollo/client"
-
-						const RepoQuery = gql`
-							query Repo($name: String!, $owner: String!) {
-								repository(name: $name, owner: $owner) {
-									id
-									stargazerCount
-								}
-							}
-						`
-
-						const StarRepoMutation = gql`
-							mutation StarRepo($id: ID!) {
-								addStar(input: { starrableId: $id }) {
-									starrable {
-										... on Repository {
-											homepageUrl
-											stargazerCount
-										}
-									}
-								}
-							}
-						`
-						
-						function StarButton() {
-							const {data, loading, error} = useQuery(RepoQuery, { variables: {name: "apollo", owner: "apollographql"}})
-							const [addStar, result] = useMutation(StarRepoMutation)
-
-							if (loading) return "Loading…"
-							if (error) return "Failed to load"
-
-							return (
-								<button
-									onClick={() => addStar({ variables: { id: data.repository.id } })}
-								>
-									⭐️
-								</button>
-							)
-						}		
-						</script></code></pre>
-        </section>
-
-        <section data-auto-animate>
-          <p class="subtitle" style="font-size: 0.6em">
-            What will be stored in the cache after the
-            user clicks the button?
-          </p>
-          <img
-            src="dist/assets/stars.png"
-            height="30px"
-            style="margin: 0"
-          />
-          <div
-            style="display: flex; flex-direction: row"
-          >
+        <section>
+          <section data-auto-animate>
+            <p
+              class="subtitle"
+              style="font-size: 0.6em"
+            >
+              What will be stored in the cache after
+              the user clicks the button?
+            </p>
+            <img
+              src="dist/assets/stars.png"
+              height="30px"
+              style="margin: 0"
+            />
             <pre
               data-id="code-animation"
               style="font-size: 0.26em"
             ><code class="hljs jsx" data-trim><script type="text/template">
-						import { gql, useQuery } from "@apollo/client"
-
-						const RepoQuery = gql`
-							query Repo($name: String!, $owner: String!) {
-								repository(name: $name, owner: $owner) {
-									id
-									stargazerCount
-								}
-							}
-						`
-
-						const StarRepoMutation = gql`
-							mutation StarRepo($id: ID!) {
-								addStar(input: { starrableId: $id }) {
-									starrable {
-										... on Repository {
-											homepageUrl
-											stargazerCount
-										}
-									}
-								}
-							}
-						`
-						
-						function StarButton() {
-							const {data, loading, error} = useQuery(RepoQuery, { variables: {name: "apollo", owner: "apollographql"}})
-							const [addStar, result] = useMutation(StarRepoMutation)
-
-							if (loading) return "Loading…"
-							if (error) return "Failed to load"
-
-							return (
-								<button
-									onClick={() => addStar({ variables: { id: data.repository.id } })}
-								>
-									⭐️
-								</button>
-							)
-						}		
-						</script></code></pre>
-            <pre
-              data-id="code-animation"
+											import { gql, useQuery } from "@apollo/client"
+					
+											const RepoQuery = gql`
+												query Repo($name: String!, $owner: String!) {
+													repository(name: $name, owner: $owner) {
+														id
+														stargazerCount
+													}
+												}
+											`
+					
+											const StarRepoMutation = gql`
+												mutation StarRepo($id: ID!) {
+													addStar(input: { starrableId: $id }) {
+														starrable {
+															... on Repository {
+																homepageUrl
+																stargazerCount
+															}
+														}
+													}
+												}
+											`
+											
+											function StarButton() {
+												const {data, loading, error} = useQuery(RepoQuery, { variables: {name: "apollo", owner: "apollographql"}})
+												const [addStar, result] = useMutation(StarRepoMutation)
+					
+												if (loading) return "Loading…"
+												if (error) return "Failed to load"
+					
+												return (
+													<button
+														onClick={() => addStar({ variables: { id: data.repository.id } })}
+													>
+														⭐️
+													</button>
+												)
+											}		
+											</script></code></pre>
+          </section>
+          <section data-auto-animate>
+            <p
+              class="subtitle"
+              style="font-size: 0.6em"
+            >
+              What will be stored in the cache after
+              the user clicks the button?
+            </p>
+            <img
+              src="dist/assets/stars.png"
+              height="30px"
+              style="margin: 0"
+            />
+            <div
               style="
-                max-width: 350px;
-                padding-left: 8px;
-                font-size: 0.26em;
+                display: flex;
+                flex-direction: row;
               "
-            ><code class="hljs jsx" data-trim><script type="text/template">
-						{
-							"Repository:1": {
-								"id": 1,
-								"stargazerCount": 0
-							}
-						}
-						</script></code></pre>
-          </div>
+            >
+              <pre
+                data-id="code-animation"
+                style="font-size: 0.26em"
+              ><code class="hljs jsx" data-trim><script type="text/template">
+											import { gql, useQuery } from "@apollo/client"
+					
+											const RepoQuery = gql`
+												query Repo($name: String!, $owner: String!) {
+													repository(name: $name, owner: $owner) {
+														id
+														stargazerCount
+													}
+												}
+											`
+					
+											const StarRepoMutation = gql`
+												mutation StarRepo($id: ID!) {
+													addStar(input: { starrableId: $id }) {
+														starrable {
+															... on Repository {
+																homepageUrl
+																stargazerCount
+															}
+														}
+													}
+												}
+											`
+											
+											function StarButton() {
+												const {data, loading, error} = useQuery(RepoQuery, { variables: {name: "apollo", owner: "apollographql"}})
+												const [addStar, result] = useMutation(StarRepoMutation)
+					
+												if (loading) return "Loading…"
+												if (error) return "Failed to load"
+					
+												return (
+													<button
+														onClick={() => addStar({ variables: { id: data.repository.id } })}
+													>
+														⭐️
+													</button>
+												)
+											}		
+											</script></code></pre>
+              <pre
+                data-id="code-animation"
+                style="
+                  max-width: 350px;
+                  padding-left: 8px;
+                  font-size: 0.26em;
+                "
+              ><code class="hljs jsx" data-trim><script type="text/template">
+											{
+												"Repository:1": {
+													"id": 1,
+													"stargazerCount": 0
+												}
+											}
+											</script></code></pre>
+            </div>
+          </section>
         </section>
 
         <section data-markdown>
@@ -906,11 +986,13 @@
 				</script></code></pre>
 
           <aside class="notes">
-            - read is called whenever the field is read
-            from the cache - shortcut when not defining
-            anything else but the read function - the
-            returned value will always be returned from
-            requests regardless of fetch policy
+            - map from __typenames to it's caching
+            configuration - read is called whenever the
+            field is read from the cache - shortcut
+            when not defining anything else but the
+            read function - the returned value will
+            always be returned from requests regardless
+            of fetch policy
           </aside>
         </section>
 
@@ -968,42 +1050,21 @@
 						----
 						My score "formula" <!-- .element: class="hint" -->
 						```js
+const failurePenalty =
+	headRef?.target?.status?.state === "FAILURE" ? 10 : 0
+
 Math.floor(
 	Math.abs(additions - deletions) / 100 +
 		Math.pow(changedFiles, 2) / 100
-)
+) + failurePenalty
 						```
+						
+						Feel free to use your own!
+
+						Note:
+						Showcase client schema after solution
 					</textarea
           >
-        </section>
-
-        <section data-auto-animate>
-          <h2 data-id="code-title">Field Policies</h2>
-          <p class="subtitle">Update cache data</p>
-          <pre
-            data-id="code-animation"
-          ><code class="hljs jsx" data-trim data-line-numbers="|5-10"><script type="text/template">
-					const cache = new InMemoryCache({
-						typePolicies: {
-							User: {
-								fields: {
-									pullRequests: {
-										merge(existing = [], incoming) {
-											return [...existing, ...incoming];
-										},
-									},
-								},
-							},
-						},
-					});
-				</script></code></pre>
-
-          <aside class="notes">
-            - merge is called whenever a field is
-            updated in the cache - you can decide what
-            ends up written to the cache based on the
-            previous and new value
-          </aside>
         </section>
 
         <section data-auto-animate>
@@ -1079,62 +1140,50 @@ Math.floor(
 						## Exercise time!
 						Paginate results <!-- .element: class="subtitle" -->
 
-						Fetch the next page of PRs when clicking "Load More".
+						Use `fetchMore` to fetch the next page of PRs when clicking "Load More".
 
 						**Branch: `4-paginate-results-template`**
 
-						Note:
-						Let me know once the request is sent - is it updating the list?
+						----
+						Once the request is sent - is it updating the list? <!-- .element: class="hint" -->
 
+						Note:
+						- showcase tabs 
 						- since queries are cached with all their arguments, this is just saved as a separate result in the cache
+						- showcase in cache
 						- it doesn't append to the previous query's result
 						- we need to write a field policy that will merge the results
-						- we could use the previous merge example
 					</textarea
           >
         </section>
 
         <section data-auto-animate>
-          <h2 data-id="code-title">Pagination</h2>
-          <p class="subtitle">
-            <code>relayStylePagination</code>
-          </p>
+          <h2 data-id="code-title">Field Policies</h2>
+          <p class="subtitle">Update cache data</p>
           <pre
             data-id="code-animation"
-          ><code class="hljs jsx" data-trim data-line-numbers=""><script type="text/template">
-						const cache = new InMemoryCache({
-							typePolicies: {
-								User: {
-									fields: {
-										pullRequests: relayStylePagination()
-									}
-								}
-							}
-						})
+          ><code class="hljs jsx" data-trim data-line-numbers="|5-10"><script type="text/template">
+					const cache = new InMemoryCache({
+						typePolicies: {
+							User: {
+								fields: {
+									pullRequests: {
+										merge(existing = [], incoming) {
+											return [...existing, ...incoming];
+										},
+									},
+								},
+							},
+						},
+					});
 				</script></code></pre>
 
           <aside class="notes">
-            but Apollo provides us with a built-in
-            policy for cursor pagination
+            - merge is called whenever a field is
+            updated in the cache - you can decide what
+            ends up written to the cache based on the
+            previous and new value
           </aside>
-        </section>
-
-        <section data-markdown>
-          <textarea data-template>
-						## Exercise time!
-						Paginate results <!-- .element: class="subtitle" -->
-
-						Display all loaded PR pages.
-
-						**Branch: `4-paginate-results-checkpoint-a`**
-
-						Note:
-						Why is this broken now?
-
-						- by default the relay style pagination assumes all query arguments are pagination arguments
-						- enter keyArgs
-					</textarea
-          >
         </section>
 
         <section data-auto-animate>
@@ -1144,13 +1193,13 @@ Math.floor(
           </p>
           <pre
             data-id="code-animation"
-          ><code class="hljs jsx" data-trim data-line-numbers="|6|15-19|"><script type="text/template">
+          ><code class="hljs jsx" data-trim data-line-numbers="|6|21-25|"><script type="text/template">
 						const cache = new InMemoryCache({
 							typePolicies: {
 								User: {
 									fields: {
 										pullRequests: {
-											keyArgs: ["state"],
+											keyArgs: ["states"],
 										},
 									},
 								},
@@ -1160,13 +1209,13 @@ Math.floor(
 						// later in query
 						const Query = gql`
 							query User(
-								$state: String
+								$states: [String]
 								$limit: Int!
 								$offset: Int
 							) {
 								viewer {
 									pullRequests(
-										state: $state
+										states: $states
 										limit: $limit
 										offset: $offset
 									) {
@@ -1189,119 +1238,590 @@ Math.floor(
 
         <section data-markdown>
           <textarea data-template>
+						## Exercise time!
+						Paginate results <!-- .element: class="subtitle" -->
+
+						Display all loaded PR pages.
+
+						**Branch: `4-paginate-results-checkpoint-a`**
+
+						----
+						*Hints* <!-- .element: class="hint" -->
+						* write a merge policy <!-- .element: class="hint" -->
+						* set appropriate <!-- .element: class="hint" --> `keyArgs` <!-- .element: class="hint" -->
+					</textarea
+          >
+        </section>
+
+        <section data-auto-animate>
+          <h2 data-id="code-title">Pagination</h2>
+          <p class="subtitle">
+            <code>relayStylePagination</code>
+          </p>
+          <pre
+            data-id="code-animation"
+          ><code class="hljs jsx" data-trim data-line-numbers=""><script type="text/template">
+						const cache = new InMemoryCache({
+							typePolicies: {
+								User: {
+									fields: {
+										pullRequests: relayStylePagination("states")
+									}
+								}
+							}
+						})
+				</script></code></pre>
+
+          <aside class="notes">
+            but Apollo provides us with a built-in
+            policy for cursor pagination
+          </aside>
+        </section>
+
+        <section data-markdown>
+          <textarea data-template>
 						## Final exercise time!
 						Paginate results <!-- .element: class="subtitle" -->
 
-						Actually display all loaded PR pages for all PR states.
+						Use `relayStylePagination` to paginate pull requests.
 
 						**Branch: `4-paginate-results-checkpoint-b`**
 					</textarea
           >
         </section>
 
-        <section data-auto-animate>
-          <h2 data-id="code-title">Field Policies</h2>
-          <p class="subtitle">References</p>
-
-          <pre
-            data-id="code-animation"
-          ><code class="hljs jsx" data-trim data-line-numbers="|5-10|11-16|"><script type="text/template">
-						const cache = new InMemoryCache({
-							typePolicies: {
-								User: {
-									fields: {
-										firstPR(_, { readField }) {
-											const pullRequests = readField(
-												"pullRequests"
-											)
-											return pullRequests[0] // { __ref: "PullRequest:123" }
+        <section>
+          <section data-auto-animate="">
+            <h2>Field Policies</h2>
+            <p class="subtitle">Key Fields</p>
+            <pre data-id="code-animation">
+							<code class="hljs js" data-trim="" data-line-numbers="">
+								<script type="text/template">
+								const cache = new InMemoryCache({
+									typePolicies: {
+										User: {
+											keyFields: ["login"],
 										},
-										firstPRTitle(_, { readField }) {
-											const pullRequests = readField(
-												"pullRequests"
-											)
-											return readField(pullRequests[0], "title")
+									},
+								})</script>
+							</code>
+						</pre>
+            <aside class="notes">
+              - keyFields define which fields should be
+              used to generate the cache key
+            </aside>
+          </section>
+          <section data-auto-animate="">
+            <h2>Field Policies</h2>
+            <p class="subtitle">Key Fields</p>
+            <pre data-id="code-animation">
+							<code class="hljs js" data-trim="" data-line-numbers="">
+								<script type="text/template">
+								const cache = new InMemoryCache({
+									typePolicies: {
+										User: {
+											keyFields: ["name", "email"],
+										},
+									},
+								})</script>
+							</code>
+						</pre>
+            <aside class="notes">
+              multiple keyFields mean all the fields
+              should be used to generate the cache key
+            </aside>
+          </section>
+          <section data-auto-animate="">
+            <h2>Field Policies</h2>
+            <p class="subtitle">Key Fields</p>
+            <pre data-id="code-animation">
+							<code class="hljs js" data-trim="" data-line-numbers="">
+								<script type="text/template">
+								const cache = new InMemoryCache({
+									typePolicies: {
+										CurrentUser: {
+											keyFields: [],
+										},
+									},
+								})</script>
+							</code>
+						</pre>
+            <aside class="notes">
+              empty keyFields mean this type will
+              always be a singleton - only one instance
+              of it will ever be cached
+            </aside>
+          </section>
+        </section>
+
+        <section>
+          <section data-auto-animate>
+            <h2 data-id="code-title">
+              Advanced Field Policies
+            </h2>
+            <p class="subtitle">References</p>
+            <pre
+              data-id="code-animation"
+            ><code class="hljs jsx" data-trim data-line-numbers="|5-10|11-16|"><script type="text/template">
+							const cache = new InMemoryCache({
+								typePolicies: {
+									User: {
+										fields: {
+											firstPR(_, { readField }) {
+												const pullRequests = readField(
+													"pullRequests"
+												)
+												return pullRequests[0] // { __ref: "PullRequest:123" }
+											},
+											firstPRTitle(_, { readField }) {
+												const pullRequests = readField(
+													"pullRequests"
+												)
+												return readField(pullRequests[0], "title")
+											},
 										},
 									},
 								},
-							},
-						})
-						
-				</script></code></pre>
+							})
+							</script></code></pre>
+            <aside class="notes">
+              - we can return a reference to another
+              object from a read policy - we can also
+              read fields from other objects in the
+              cache instead of the parent by providing
+              the reference
+            </aside>
+          </section>
+          <section data-auto-animate>
+            <h2 data-id="code-title">
+              Advanced Field Policies
+            </h2>
+            <p class="subtitle">Cache Redirects</p>
+            <pre
+              data-id="code-animation"
+            ><code class="hljs jsx" data-trim data-line-numbers="|18-26|30-36|6-9|"><script type="text/template">
+										const cache = new InMemoryCache({
+											typePolicies: {
+												Query: {
+													fields: {
+														pullRequest(_, { args, toReference }) {
+															return toReference({
+																__typename: 'PullRequest',
+																id: args.id
+															})
+														},
+													},
+												},
+											},
+										});
+					
+										// query
+										gql`
+										query List {
+											viewer {
+												pullRequests {
+													id
+													title
+													url
+												}
+											}
+										}
+										`
+					
+										gql`
+										query Single($id: ID!) {
+											pullRequest(id: $id) {
+												id
+												title
+												url
+											}
+										}
+										`
+									</script></code></pre>
+            <aside class="notes">
+              - we can use field policies to improve
+              caching for objects that we know are
+              already in the cache but apollo doesn't
+              recognize - we know that the second query
+              will fetch the same data as the first, so
+              we can use a cache redirect to avoid
+              unnecessary network requests
+            </aside>
+          </section>
 
-          <aside class="notes">
-            - we can return a reference to another
-            object from a read policy - we can also
-            read fields from other objects in the cache
-            instead of the parent by providing the
-            reference - mention other read field
-            arguments for working with references
-          </aside>
-        </section>
+          <section data-auto-animate>
+            <h2 data-id="code-title">
+              Advanced Field Policies
+            </h2>
+            <p class="subtitle">Other utilities</p>
 
-        <section data-auto-animate>
-          <h2 data-id="code-title">Field Policies</h2>
-          <p class="subtitle">Cache Redirects</p>
-
-          <pre
-            data-id="code-animation"
-          ><code class="hljs jsx" data-trim data-line-numbers="|18-26|30-36|6-9|"><script type="text/template">
-					const cache = new InMemoryCache({
-						typePolicies: {
-							Query: {
-								fields: {
-									pullRequest(_, { args, toReference }) {
-										return toReference({
-											__typename: 'PullRequest',
-											id: args.id
-										})
+            <a
+              href="https://www.apollographql.com/docs/react/caching/cache-field-behavior#fieldpolicy-api-reference"
+              >Full API Reference</a
+            >
+            <pre
+              data-id="code-animation"
+            ><code class="hljs jsx" data-trim data-line-numbers=""><script type="text/template">
+							const cache = new InMemoryCache({
+								typePolicies: {
+									Query: {
+										fields: {
+											pullRequest: {
+												read(existingValue, options) {
+													const {
+														cache,
+														args,
+														fieldName,
+														field,
+														variables,
+														isReference,
+														toReference,
+														canRead,
+														storage,
+														mergeObjects,
+													} = options
+												},
+											},
+										},
 									},
 								},
-							},
-						},
-					});
+							})
+						</script></code></pre>
 
-					// query
-					gql`
-					query List {
-						viewer {
-							pullRequests {
-								id
-								title
-								url
-							}
-						}
-					}
-					`
+            <aside class="notes">
+              - in the field policy options argument we
+              get multiple low-level utilities for
+              interacting directly with the cache
+            </aside>
+          </section>
 
-					gql`
-					query Single($id: ID!) {
-						pullRequest(id: $id) {
-							id
-							title
-							url
-						}
-					}
-					`
-				</script></code></pre>
+          <section data-auto-animate>
+            <h2 data-id="code-title">
+              Advanced Field Policies
+            </h2>
+            <p class="subtitle">
+              Arguments and variables
+            </p>
 
-          <aside class="notes">
-            - we can use field policies to improve
-            caching for objects that we know are
-            already in the cache but apollo doesn't
-            recognize - we know that the second query
-            will fetch the same data as the first, so
-            we can use a cache redirect to avoid
-            unnecessary network requests
-          </aside>
+            <pre
+              data-id="code-animation"
+            ><code class="hljs jsx" data-trim data-line-numbers=""><script type="text/template">
+							useQuery(
+								gql`
+									query PullRequests($states: [String]) {
+										viewer {
+											pullRequests(
+												states: $states
+												orderBy: {
+													field: CREATED_AT
+													direction: DESC
+												}
+											) {
+												id
+												title
+											}
+										}
+									}
+								`,
+								{ variables: { states: ["OPEN"] } }
+							)
+
+							const cache = new InMemoryCache({
+								typePolicies: {
+									User: {
+										fields: {
+											pullRequests: {
+												read(_, options) {
+													const { args, variables } = options
+
+													variables
+													/*
+													{
+														states: ['OPEN']
+													}
+													*/
+
+													args
+													/*
+													{
+														states: ['OPEN'],
+														orderBy: {field": "CREATED_AT", "direction": "DESC"}
+													}
+													*/
+												},
+											},
+										},
+									},
+								},
+							})
+						</script></code></pre>
+
+            <aside class="notes">
+              - arguments are all arguments passed to
+              the field - variables are only the
+              arguments that were provided dynamically
+              to useQuery or useMutation
+            </aside>
+          </section>
+
+          <section data-auto-animate>
+            <h2 data-id="code-title">
+              Advanced Field Policies
+            </h2>
+            <p class="subtitle">
+              Working with references
+            </p>
+
+            <pre
+              data-id="code-animation"
+            ><code class="hljs jsx" data-trim data-line-numbers=""><script type="text/template">
+							const cache = new InMemoryCache({
+								typePolicies: {
+									Query: {
+										fields: {
+											pullRequest: {
+												read(_, options) {
+													const {
+														isReference,
+														toReference,
+														canRead,
+														readField,
+													} = options
+
+													const ref = toReference({
+														__typename: "PullRequest",
+														id: "not-existing-id",
+													})
+													/*  
+														{ 
+															__ref: "PullRequest:non-existing-id" 
+														}
+													*/
+													isReference(ref) // true
+													canRead(ref) // false
+													readField("title", ref) // undefined
+												},
+											},
+										},
+									},
+								},
+							})
+						</script></code></pre>
+
+            <aside class="notes">
+              - canRead means that the reference points
+              to an actual object in the cache
+            </aside>
+          </section>
+
+          <section data-auto-animate>
+            <h2 data-id="code-title">
+              Advanced Field Policies
+            </h2>
+            <p class="subtitle">
+              Interacting with the cache
+            </p>
+
+            <pre
+              data-id="code-animation"
+            ><code class="hljs jsx" data-trim data-line-numbers=""><script type="text/template">
+							const PrQuery = gql`
+								query PullRequest($id: ID!) {
+									pullRequest(id: $id) {
+										id
+										title
+									}
+								}
+							`
+
+							const cache = new InMemoryCache({
+								typePolicies: {
+									Query: {
+										fields: {
+											pullRequest: {
+												read(existingPr, options) {
+													const { cache } = options
+
+													cache.writeQuery({
+														query: PrQuery,
+														data: {
+															__typename: "PullRequest",
+															id: 1,
+															title: "New title",
+														},
+													}) // update cache LOCALLY
+													cache.readQuery({
+														query: PrQuery,
+														variables: { id: 1 },
+													})
+													cache.readFragment({
+														id: "PullRequest:1",
+														fragment: gql`
+															fragment PRTitle on PullRequest {
+																id
+																title
+															}
+														`,
+													})
+													cache.writeFragment({
+														id: "PullRequest:1",
+														fragment: gql`
+															fragment PRTitle on PullRequest {
+																id
+																title
+															}
+														`,
+														data: { title: "Another title" },
+													})
+
+													cache.updateQuery(
+														{ query: PrQuery },
+														(data) => ({
+															title: `${data.pullRequest.title}!!!`,
+														})
+													)
+
+													const id = cache.identify(existingPr)
+													cache.modify({
+														id,
+														fields: {
+															title(existingTitle) {
+																return existingTitle.toUpperCase()
+															},
+														},
+													})
+												},
+											},
+										},
+									},
+								},
+							})
+						</script></code></pre>
+
+            <aside class="notes">
+              cache.modify - doesn't call merge, has to
+              write fields that already exist
+            </aside>
+          </section>
+
+          <section data-auto-animate>
+            <h2 data-id="code-title">
+              Advanced Field Policies
+            </h2>
+            <p class="subtitle">Field cache</p>
+
+            <pre
+              data-id="code-animation"
+            ><code class="hljs jsx" data-trim data-line-numbers=""><script type="text/template">
+							const cache = new InMemoryCache({
+								typePolicies: {
+									Query: {
+										fields: {
+											pullRequest: {
+												read(value, options) {
+													const {
+														fieldName, // "pullRequest"
+														field, // internal metadata about this field
+														storage, // persistent field-specific cache
+													} = options
+
+													const expensiveValue =
+														storage["expensiveValue"] ||
+														expensiveComputation(value)
+												},
+											},
+										},
+									},
+								},
+							})
+						</script></code></pre>
+
+            <aside class="notes"></aside>
+          </section>
+
+          <section data-auto-animate>
+            <h2 data-id="code-title">
+              Advanced Field Policies
+            </h2>
+            <p class="subtitle">Merge utilities</p>
+
+            <pre
+              data-id="code-animation"
+            ><code class="hljs jsx" data-trim data-line-numbers=""><script type="text/template">
+							const cache = new InMemoryCache({
+								typePolicies: {
+									PullRequest: {
+										states: {
+											merge(existing, incoming) {
+												return [...existing, ...incoming]
+											},
+										},
+									},
+
+									Query: {
+										fields: {
+											pullRequest: {
+												merge(existing, incoming, options) {
+													const { mergeObjects } = options
+
+													existing
+													/* 
+														{
+															__typename: "PullRequest",
+															id: 1,
+															title: "A title",
+															states: ["MERGED"]
+														}
+													*/
+
+													incoming(
+														/* 
+														{
+															__typename: "PullRequest",
+															id: 1,
+															title: "New title",
+															states: ["OPEN"]
+														}
+													*/
+
+														{ ...existing, ...incoming }
+													)
+													/* 
+														{
+															__typename: "PullRequest",
+															id: 1,
+															title: "New title",
+															states: ["OPEN"]
+														}
+													*/
+
+													mergeObjects(existing, incoming)
+													/* 
+														{
+															__typename: "PullRequest",
+															id: 1,
+															title: "New title",
+															states: ["MERGED", "OPEN"]
+														}
+													*/
+												},
+											},
+										},
+									},
+								},
+							})
+						</script></code></pre>
+
+            <aside class="notes"></aside>
+          </section>
         </section>
 
-        <!---<section>
+        <section>
           <h2 data-id="code-title">Mocking</h2>
           <p class="subtitle">Introspection Query</p>
           <pre
             data-id="code-animation"
-          ><code class="hljs graphql" data-trim data-line-numbers="|"><script type="text/template">
+          ><code class="hljs graphql" data-trim data-line-numbers=""><script type="text/template">
 					query IntrospectionQuery {
 						__schema {
 							queryType { name }
@@ -1391,6 +1911,14 @@ Math.floor(
 						}
 					}
 				</script></code></pre>
+
+          <aside class="notes">
+            this is used to get the full schema
+            definition - every graphql server
+            implements this query it is used to
+            generate documentation in graphiql and to
+            generate automated mocks
+          </aside>
         </section>
 
         <section data-auto-animate>
@@ -1398,10 +1926,11 @@ Math.floor(
           <p class="subtitle">
             <code>@graphql-tools/mock</code>
           </p>
+          <p class="subtitle">Executable Schema</p>
           <pre
             data-id="code-animation"
-          ><code class="hljs jsx" data-trim data-line-numbers="|2|5-8|"><script type="text/template">
-					import { buildClientSchema } from "graphql"
+          ><code class="hljs jsx" data-trim data-line-numbers="|2|5-8|10-13|"><script type="text/template">
+					import { buildClientSchema, graphql } from "graphql"
 					import * as introspectionResult from "schema.json"
 
 					const schema = buildClientSchema(introspectionResult)
@@ -1410,7 +1939,17 @@ Math.floor(
 						mocks: {},
 					})
 
+					graphql({
+						schema,
+						source: '{ viewer { login } }'
+					})
 				</script></code></pre>
+
+          <aside class="notes">
+            automatically generates mocks for built-in
+            scalar types and object types based on the
+            schema (pretty dumb)
+          </aside>
         </section>
 
         <section data-auto-animate>
@@ -1418,7 +1957,7 @@ Math.floor(
           <p>Type Mocks</p>
           <pre
             data-id="code-animation"
-          ><code class="hljs jsx" data-trim data-line-numbers="|4-12|15-18|"><script type="text/template">
+          ><code class="hljs jsx" data-trim data-line-numbers="|5-7|8-11|15-18|"><script type="text/template">
 					import { buildClientSchema } from "graphql"
 					import * as introspectionResult from "schema.json"
 
@@ -1438,16 +1977,20 @@ Math.floor(
 						mocks,
 					})
 				</script></code></pre>
+
+          <aside class="notes">
+            you can override how individual types are
+            generated by providing a function for each
+            type
+          </aside>
         </section>
 
         <section data-auto-animate>
           <h2 data-id="code-title">Mocking</h2>
-          <p class="subtitle">
-            Query and Mutation Results
-          </p>
+          <p class="subtitle">Full Query Results</p>
           <pre
             data-id="code-animation"
-          ><code class="hljs jsx" data-trim data-line-numbers="|24|5|6|6-8|9-11|4|13|14-18|"><script type="text/template">
+          ><code class="hljs jsx" data-trim data-line-numbers="|5|6|7|16|"><script type="text/template">
 					import { buildClientSchema } from "graphql"
 					import * as introspectionResult from "schema.json"
 
@@ -1456,10 +1999,82 @@ Math.floor(
 							viewer(parent, args, context, info) {
 								return JSON.parse(localStorage.getItem("user"))
 							},
+						},
+					})
+
+					const schema = buildClientSchema(introspectionResult)
+					const schemaWithMocks = addMocksToSchema({
+						schema,
+						mocks: {},
+						resolvers,
+					})
+				</script></code></pre>
+
+          <aside class="notes">
+            specific operation results and field values
+            can also be mocked using resolvers
+            resolvers can be dynamic, they have access
+            to the parent object, the arguments,
+            request context, and metadata about the
+            graphql document
+          </aside>
+        </section>
+
+        <section data-auto-animate>
+          <h2 data-id="code-title">Mocking</h2>
+          <p class="subtitle">Using The Store</p>
+          <pre
+            data-id="code-animation"
+          ><code class="hljs jsx" data-trim data-line-numbers="|12|14-16|5-9|"><script type="text/template">
+					import { buildClientSchema } from "graphql"
+					import * as introspectionResult from "schema.json"
+
+					const mocks = {
+						User: () => ({
+							id: random.uuid(),
+							name: random.name(),
+							email: random.email()
+						})
+					}
+
+					const resolvers = (store) => ({
+						Query: {
 							userById(parent, { id }) {
 								return store.get("User", id)
 							},
 						},
+					})
+
+					const schema = buildClientSchema(introspectionResult)
+					const schemaWithMocks = addMocksToSchema({
+						schema,
+						mocks,
+						resolvers,
+					})
+				</script></code></pre>
+
+          <aside class="notes">
+            the mock server uses an underlying store to
+            persist generated values it's similar to
+            the apollo cache in this example we can
+            force it to use the provided id argument by
+            using the store.get function - it will
+            return the value from the store if it
+            exists, otherwise it will generate a new
+            value but use the provided id
+          </aside>
+        </section>
+
+        <section data-auto-animate>
+          <h2 data-id="code-title">Mocking</h2>
+          <p class="subtitle">Mutation Results</p>
+          <pre
+            data-id="code-animation"
+          ><code class="hljs jsx" data-trim data-line-numbers="|5|7|9|"><script type="text/template">
+					import { buildClientSchema } from "graphql"
+					import * as introspectionResult from "schema.json"
+
+					const resolvers = (store) => ({
 						Mutation: {
 							changeMyName(parent, { name }) {
 								store.set("Query", "ROOT", "viewer", { name })
@@ -1476,7 +2091,29 @@ Math.floor(
 						resolvers,
 					})
 				</script></code></pre>
-        </section>!-->
+
+          <aside class="notes">
+            similarly, you can update the store with
+            the results of a mutation and return the
+            updated result
+          </aside>
+        </section>
+
+        <section data-markdown>
+          <textarea data-template>
+						## Exercise time!
+						Mock GitHub API <!-- .element: class="subtitle" -->
+
+						Make the app work with a mock GitHub API.
+
+						**Branch: `5-mock-responses-template`**
+
+						----
+
+						*You will need to provide mocks for some scalars used by GitHub* <!-- .element: class="hint" -->
+					</textarea
+          >
+        </section>
       </div>
     </div>
 
